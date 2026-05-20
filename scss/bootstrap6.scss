@@ -14,8 +14,9 @@
 //    _bs-forward.scss sets config variables then forwards all Bootstrap styles.
 @use "bs-forward";
 
-// 2. Roboto webfont (@font-face declarations, self-hosted from theme/roboto/).
-@use "roboto";
+// 2. Noto Sans webfont (@font-face declarations + --body-font-family override,
+//    self-hosted from theme/noto/).
+@use "noto";
 
 // 3. Bootstrap 5 compatibility shim (class aliases for renamed components).
 //    Remove this line once Plone templates are updated to Bootstrap 6 classes.

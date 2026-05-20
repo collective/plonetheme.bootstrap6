@@ -1,14 +1,14 @@
 // ============================================================================
 // plonetheme.bootstrap6 — Toolbar (#edit-zone, #portal-toolbar)
 // Compatible with Plone Classic UI edit toolbar.
-// Uses Roboto / Roboto Condensed (self-hosted, declared in _roboto.scss).
+// Uses Noto Sans / Noto Sans Condensed (self-hosted, declared in _noto.scss).
 // ============================================================================
 
 @use "bootstrap/scss/config" as *;
 @use "bootstrap/scss/layout/breakpoints" as *;
 
-$toolbar-font:          "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
-$toolbar-font-condensed: "Roboto Condensed", "Arial Narrow", sans-serif !default;
+$toolbar-font:           "Noto Sans", system-ui, -apple-system, sans-serif !default;
+$toolbar-font-condensed: "Noto Sans Condensed", "Arial Narrow", sans-serif !default;
 
 // Toolbar z-index: above Bootstrap drawer, below dialog
 $toolbar-z-index: #{$zindex-drawer + 5} !default;

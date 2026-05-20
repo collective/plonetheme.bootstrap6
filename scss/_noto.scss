@@ -1,0 +1,68 @@
+// ============================================================================
+// plonetheme.bootstrap6 — Noto Sans webfont
+//
+// Declares @font-face rules for:
+//   • Noto Sans           — variable weight (100–900), normal + italic
+//   • Noto Sans Condensed — variable width (wdth axis, 62.5 %–100 %)
+//
+// Font files are self-hosted in the theme's noto/ directory.
+// Source: @fontsource-variable/noto-sans (OFL-1.1)
+//
+// Set $enable-noto-webfont: false to skip all declarations
+// (e.g. when loading Noto Sans from Google Fonts instead).
+// ============================================================================
+
+$enable-noto-webfont: true !default;
+
+// Path relative to the compiled CSS file  (css/bootstrap6.css → ../noto/)
+$noto-path: "../noto/" !default;
+
+@if $enable-noto-webfont {
+
+  // --- Noto Sans — variable weight, normal ----------------------------------
+  // latin-ext first so it is tested before the smaller latin range.
+
+  @font-face {
+    font-family: "Noto Sans";
+    src: local("Noto Sans"),
+         url("#{$noto-path}noto-sans-latin-ext-wght-normal.woff2") format("woff2"),
+         url("#{$noto-path}noto-sans-latin-wght-normal.woff2")     format("woff2");
+    font-weight: 100 900;
+    font-style:  normal;
+    font-display: swap;
+  }
+
+  // --- Noto Sans — variable weight, italic ----------------------------------
+
+  @font-face {
+    font-family: "Noto Sans";
+    src: local("Noto Sans Italic"),
+         url("#{$noto-path}noto-sans-latin-ext-wght-italic.woff2") format("woff2"),
+         url("#{$noto-path}noto-sans-latin-wght-italic.woff2")     format("woff2");
+    font-weight: 100 900;
+    font-style:  italic;
+    font-display: swap;
+  }
+
+  // --- Noto Sans Condensed — variable width ---------------------------------
+  // font-stretch range matches the wdth axis (extra-condensed → normal).
+  // CSS usage: font-family: "Noto Sans Condensed"; font-stretch: condensed;
+
+  @font-face {
+    font-family: "Noto Sans Condensed";
+    src: local("Noto Sans Condensed"),
+         url("#{$noto-path}noto-sans-latin-ext-wdth-normal.woff2") format("woff2"),
+         url("#{$noto-path}noto-sans-latin-wdth-normal.woff2")     format("woff2");
+    font-weight: 100 900;
+    font-stretch: 62.5% 100%;
+    font-display: swap;
+  }
+
+  // --- Override Bootstrap 6 body font-family --------------------------------
+  // Bootstrap 6 uses --body-font-family as a CSS custom property (not a
+  // Sass config variable), so we set it here alongside the @font-face rules.
+
+  :root {
+    --body-font-family: "Noto Sans", system-ui, -apple-system, sans-serif;
+  }
+}
