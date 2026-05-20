@@ -72,9 +72,12 @@ The theme is built from a set of modular SCSS files inside `scss/`. Bootstrap 6 
 ```
 scss/
 ├── _bs-forward.scss        # Bootstrap 6 config + forward (must be first)
+├── _bs5-compat.scss        # Bootstrap 5 → 6 compatibility shim (see below)
+├── _noto.scss              # Noto Sans web-font face declarations
 ├── _plone-colors.scss      # Plone brand colors and state color maps
 ├── _plone-root.scss        # CSS custom properties emitted on :root
-├── bootstrap6.scss       # Main entry point (compiled to CSS)
+├── _roboto.scss            # Roboto web-font face declarations
+├── bootstrap6.scss         # Main entry point (compiled to CSS)
 └── plone/
     ├── _scaffolding.scss   # Base layout, skip nav, link colors
     ├── _header.scss        # #content-header, logo, livesearch
@@ -195,6 +198,60 @@ Bootstrap 6 replaced the `.modal` component with the native `<dialog>` element s
 | `body.modal-open` | `.dialog-open` | prevents background scroll while open |
 
 **Mockup note**: `pat-plone-modal` adds `.backdrop-active` (not `.show`) to its backdrop element. The shim accepts both.
+
+#### Responsive utility classes — breakpoint-infix format
+
+Bootstrap 6 moved the breakpoint from an infix to a prefix:
+
+| BS5 pattern | BS6 pattern | Example |
+|---|---|---|
+| `.d-{bp}-{val}` | `.{bp}\:d-{val}` | `.d-lg-flex` → `.lg\:d-flex` |
+| `.flex-{bp}-{dir}` | `.{bp}\:flex-{dir}` | `.flex-lg-row` |
+| `.align-items-{bp}-{val}` | `.{bp}\:align-items-{val}` | `.align-items-lg-center` |
+| `.justify-content-{bp}-{val}` | `.{bp}\:justify-content-{val}` | — |
+| `.order-{bp}-{n}` | `.{bp}\:order-{n}` | — |
+| `.text-{bp}-{align}` | `.{bp}\:text-{align}` | `.text-lg-center` |
+| `.float-{bp}-{dir}` | `.{bp}\:float-{dir}` | `.float-md-end` |
+
+The shim regenerates all of the above for breakpoints `sm`, `md`, `lg`, `xl`.
+
+#### Navbar expand — `.navbar-expand-{bp}`
+
+Bootstrap 6 renamed `.navbar-expand-lg` to `.lg\:navbar-expand`. The shim restores the old infix class for `sm`, `md`, `lg`, `xl`, covering the flex layout switch (horizontal nav items, hidden toggler) above the breakpoint. The offcanvas inline-display override is part of the Offcanvas section.
+
+#### Misc removed / changed classes
+
+| BS5 class | Status in BS6 | Shim behaviour |
+|---|---|---|
+| `.text-muted` | removed | maps to `var(--fg-3)` (subdued foreground token) |
+| `.btn-close` (no child `<svg>`) | requires child `<svg>` for × icon | adds `background-image` fallback via `:has()` for bare `<button class="btn-close">` |
+| `.btn-close-white` | removed | applies `filter: invert(1) grayscale(100%) brightness(200%)` |
+| `.form-select` | removed (use `.form-control` on `<select>`) | full styled-select appearance using BS6 form-control tokens |
+
+#### Bootstrap 5 `--bs-*` CSS custom properties
+
+Bootstrap 6 dropped the `--bs-` prefix entirely. Mockup components (`pat-contentbrowser`, `pat-relateditems`, etc.) reference the old `--bs-*` names directly in their Svelte styles. The shim emits a set of `--bs-*` aliases on `:root` that resolve to the corresponding Bootstrap 6 tokens:
+
+| `--bs-*` alias | Resolves to |
+|---|---|
+| `--bs-body-bg` | `var(--bg-body)` |
+| `--bs-border-color` | `var(--border-color)` |
+| `--bs-border-radius` | `var(--radius-3)` |
+| `--bs-border-style` | `var(--border-style)` |
+| `--bs-border-width` | `var(--border-width)` |
+| `--bs-primary` | `var(--primary-base)` |
+| `--bs-light` | `var(--bg-3)` |
+| `--bs-light-bg-subtle` | `var(--secondary-bg-subtle)` |
+| `--bs-btn-padding-y/x` | `var(--btn-input-padding-y/x)` |
+| `--bs-btn-font-size` | `var(--btn-input-font-size)` |
+| `--bs-primary-rgb` | `13, 110, 253` (BS5 default; for `rgba()` expressions) |
+| `--bs-secondary-bg-rgb` | `233, 236, 239` (BS5 default; for `rgba()` expressions) |
+
+> [!NOTE]
+> The `--bs-*-rgb` variables are intentionally kept at Bootstrap 5 default values
+> (not the Plone brand color) because they are used exclusively for transparency
+> overlays (`rgba(var(--bs-primary-rgb), .25)`) in Mockup's compiled Svelte output
+> — overriding them would require recompiling Mockup.
 
 ### What is *not* covered
 
