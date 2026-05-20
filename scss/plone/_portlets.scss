@@ -90,14 +90,14 @@ $portlet-border-color: var(--border-color) !default;
       }
     }
 
-    // Verschachtelte Ebenen
+    // Nested levels
     ul {
       padding-left: 1rem;
     }
   }
 }
 
-// --- Kalender-Portlet -------------------------------------------------------
+// --- Calendar portlet -------------------------------------------------------
 
 .portletCalendar {
   table {

@@ -23,12 +23,12 @@
       directory="profiles/default"
       />
 
-<genericsetup:registerProfile
-    name="uninstall"
-    title="Uninstall Bootstrap 6 Theme"
-    description="Uninstall Bootstrap 6 Theme"
-    provides="Products.GenericSetup.interfaces.EXTENSION"
-    directory="profiles/uninstall"
-    />
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="Uninstall Bootstrap 6 Theme"
+      description="Uninstall Bootstrap 6 Theme"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/uninstall"
+      />
 
 </configure>

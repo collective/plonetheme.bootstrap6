@@ -120,7 +120,7 @@
 
   <!-- Replace footer information with Plone version. -->
   <replace css:content-children="#portal-footer-wrapper #portal-footer-signature .card-body"
-           css:theme-children="#portal-footer .copyright > div"
+           css:theme-children="#portal-footer .copyright &gt; div"
   />
   <drop css:if-not-content="#portal-footer-wrapper #portal-footer-signature"
         css:theme="#portal-footer .copyright"
@@ -128,7 +128,7 @@
 
   <!-- Replace colophon information with Plone version. -->
   <replace css:content-children="#portal-footer-wrapper #portal-colophon .card-body"
-           css:theme-children="#portal-footer .colophon > div"
+           css:theme-children="#portal-footer .colophon &gt; div"
   />
   <drop css:if-not-content="#portal-footer-wrapper #portal-colophon"
         css:theme="#portal-footer .colophon"
@@ -136,7 +136,7 @@
 
   <!-- Replace site-actions with Plone version. -->
   <replace css:content="#portal-footer-wrapper .actions-site_actions"
-           css:theme-children="#portal-footer .site-actions > div"
+           css:theme-children="#portal-footer .site-actions &gt; div"
   />
   <drop css:if-not-content="#portal-footer-wrapper .actions-site_actions"
         css:theme="#portal-footer .site-actions"

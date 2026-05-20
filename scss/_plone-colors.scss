@@ -1,10 +1,10 @@
 // ============================================================================
-// plonetheme.bootstrap6 — Plone Farben
+// plonetheme.bootstrap6 — Plone color tokens
 //
-// Definiert Plone-spezifische Farben als CSS Custom Properties und Sass-
-// Variablen. Wird in bootstrap6.scss über @use eingebunden.
+// Defines Plone-specific colors as Sass variables and CSS custom property
+// maps. Consumed by bootstrap6.scss via @use.
 //
-// Verwendet Bootstrap 6 native @use Syntax — kein @import.
+// Uses Bootstrap 6 native @use syntax — no @import.
 // ============================================================================
 
 @use "sass:color";
