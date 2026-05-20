@@ -42,7 +42,6 @@ setup(
     install_requires=[
         "plone.app.theming",
         "plone.resource",
-        "plone.theme",
         "Products.GenericSetup",
     ],
     extras_require={"test": []},
