@@ -11,10 +11,11 @@
 
 :root,
 [data-bs-theme="light"] {
-  // Plone color tokens
-  @each $name, $value in plone.$plone-colors {
-    --plone-#{$name}: #{$value};
-  }
+  // Override Bootstrap 6 primary with Plone brand color.
+  // --plone-link derives from --primary-base so both stay in sync.
+  --primary-base:     #{plone.$plone-primary};
+  --plone-link:       var(--primary-base);
+  --plone-link-hover: #{plone.$plone-link-hover-color};
 
   @each $name, $value in plone.$state-colors {
     --plone-state-#{$name}: #{$value};
@@ -23,9 +24,10 @@
 
 @if $enable-dark-mode {
   @include color-mode(dark, true) {
-    @each $name, $value in plone.$plone-colors-dark {
-      --plone-#{$name}: #{$value};
-    }
+    // Lighten primary for dark backgrounds so it stays readable.
+    --primary-base:     #{plone.$plone-primary-dark};
+    --plone-link:       var(--primary-base);
+    --plone-link-hover: #{plone.$plone-link-hover-color-dark};
 
     @each $name, $value in plone.$state-colors-dark {
       --plone-state-#{$name}: #{$value};

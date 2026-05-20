@@ -146,13 +146,61 @@ Bootstrap 6 replaced the colour-named button classes with a functional modifier 
 
 Unchanged classes (`btn`, `btn-sm`, `btn-lg`, `btn-link`) still exist natively in Bootstrap 6 and do not need the shim.
 
+#### Directional dropdown containers
+
+Bootstrap 6 removed `.dropend` / `.dropstart` / `.dropup`. Side-opening menus now use `data-bs-placement`. The shim restores positioning and caret styles for the old class names.
+
+| BS5 class | Notes |
+|---|---|
+| `.dropend` | submenu opens inline-end (right in LTR); right-pointing caret |
+| `.dropstart` | submenu opens inline-start (left in LTR); left-pointing caret |
+| `.dropup` | submenu opens upward |
+
+#### Offcanvas → Drawer
+
+Bootstrap 6 replaced the offcanvas panel with a native `<dialog>`-based drawer component. Plone Classic UI uses Bootstrap 5 offcanvas for the mobile navigation panel (see `#offcanvasNavbar` in `index.html`) and Bootstrap 5 JS controls the `.show` state.
+
+| BS5 class | BS6 equivalent | Notes |
+|---|---|---|
+| `.offcanvas` | `.drawer` | position, slide-in, visibility toggle via `.show` |
+| `.offcanvas-end` | `.drawer-end` | slides in from the right |
+| `.offcanvas-start` | `.drawer-start` | slides in from the left |
+| `.offcanvas-top` | `.drawer-top` | slides in from the top |
+| `.offcanvas-bottom` | `.drawer-bottom` | slides in from the bottom |
+| `.offcanvas-header` | `.drawer-header` | header row with close button |
+| `.offcanvas-title` | `.drawer-title` | title text |
+| `.offcanvas-body` | `.drawer-body` | scrollable content area |
+| `.offcanvas-backdrop` | `::backdrop` (native) | semi-transparent overlay; `.show` triggers visibility |
+
+At the `navbar-expand-{bp}` breakpoint the offcanvas is shown inline (always visible, no slide-in), matching Bootstrap 5 navbar behaviour.
+
+#### Modal → Dialog
+
+Bootstrap 6 replaced the `.modal` component with the native `<dialog>` element styled via `.dialog-*`. Mockup's `pat-plone-modal` pattern (`data-pat-plone-modal` / `.pat-plone-modal`) still generates Bootstrap 5 `.modal` HTML (plain `<div>` elements, not `<dialog>`). This shim re-introduces all `.modal-*` CSS using Bootstrap 6 design tokens.
+
+| BS5 class | BS6 equivalent | Notes |
+|---|---|---|
+| `.modal` | `.dialog` | full-viewport container; `.show` triggers visibility |
+| `.modal-backdrop` | `::backdrop` (native) | `.show` **and** `.backdrop-active` supported (Mockup uses the latter) |
+| `.modal-dialog` | — | no inner wrapper in BS6; replicated for Mockup's `<div>` structure |
+| `.modal-content` | `.dialog` directly | styled card; uses BS6 `--border-color-translucent`, `--radius-7`, `--box-shadow-lg` |
+| `.modal-header` | `.dialog-header` | title + close button row |
+| `.modal-title` | `.dialog-title` | heading text |
+| `.modal-body` | `.dialog-body` | main content area |
+| `.modal-footer` | `.dialog-footer` | action button row |
+| `.modal-sm` / `.modal-lg` / `.modal-xl` | `.dialog-sm` / `.dialog-lg` / `.dialog-xl` | width variants |
+| `.modal-fullscreen` | `.dialog-fullscreen` | full-viewport variant |
+| `.modal-dialog-centered` | native (dialog centres via `margin: auto`) | replicated for `<div>` structure |
+| `.modal-dialog-scrollable` | — | scrollable body variant |
+| `body.modal-open` | `.dialog-open` | prevents background scroll while open |
+
+**Mockup note**: `pat-plone-modal` adds `.backdrop-active` (not `.show`) to its backdrop element. The shim accepts both.
+
 ### What is *not* covered
 
 | BS5 feature | Status |
 |---|---|
 | `.nav-tabs`, `.nav-pills`, `.nav-underline` | unchanged in BS6, no shim needed |
-| `offcanvas` | not used in Plone Classic UI templates |
-| `modal` | Plone uses `pat-plone-modal` (Patternslib), not Bootstrap modal |
 | `collapse` | still present in BS6 |
 
 ## Building CSS

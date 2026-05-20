@@ -1,7 +1,7 @@
 // ============================================================================
 // plonetheme.bootstrap6 — Toolbar (#edit-zone, #portal-toolbar)
-// Compatible with Plone Classic UI edit toolbar.
-// Uses Noto Sans / Noto Sans Condensed (self-hosted, declared in _noto.scss).
+// Compatible with Plone Classic UI edit toolbar (plone.toolbar).
+// Adapted from plonetheme.barceloneta for Bootstrap 6.
 // ============================================================================
 
 @use "bootstrap/scss/config" as *;
@@ -14,115 +14,298 @@ $toolbar-font-condensed: "Noto Sans Condensed", "Arial Narrow", sans-serif !defa
 $toolbar-z-index: #{$zindex-drawer + 5} !default;
 $toolbar-backdrop-z-index: #{$zindex-drawer} !default;
 
+// --- CSS custom properties -------------------------------------------------
+
+:root {
+  --plone-toolbar-bg:              var(--bg-2);
+  --plone-toolbar-text-color:      var(--fg-1, light-dark(#343a40, #dee2e6));
+  --plone-toolbar-locked-color:    var(--warning-base, #f0ad4e);
+  --plone-toolbar-font:            #{$toolbar-font};
+  --plone-toolbar-separator-color: var(--border-color, light-dark(#dee2e6, #495057));
+  --plone-toolbar-link-color:      var(--primary-base, #007bb1);
+  --plone-toolbar-link-hover-color: var(--plone-link-hover, #005f8a);
+  --plone-toolbar-width:           220px;
+  --plone-toolbar-width-collapsed: 60px;
+  --plone-toolbar-top-height:      2.5rem;
+}
+
 // --- Toolbar wrapper -------------------------------------------------------
 
 #portal-toolbar {
   // empty when no toolbar is rendered (anonymous user)
 }
 
-// --- Edit zone (Plone Classic UI toolbar) ----------------------------------
+// --- Edit zone — base (collapsed, dark sidebar) ----------------------------
 
-#edit-bar {
-  position: sticky;
-  top: 0;
+#edit-zone {
+  font-family: var(--plone-toolbar-font);
+  position: fixed;
   z-index: $toolbar-z-index;
-  background: var(--bg-2, #343a40);
-  color: var(--white, #fff);
-  border-bottom: 1px solid var(--border-color);
-  font-family: $toolbar-font;
-  font-size: .875rem;
+  top: 0;
+  left: 0;
+  bottom: 0;
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  min-height: 2.5rem;
+  flex-direction: column;
+  height: 100%;
+  background: var(--plone-toolbar-bg);
+  width: var(--plone-toolbar-width);
+  color: var(--plone-toolbar-text-color);
+  border-right: none;
 
-  @include media-breakpoint-down(md) {
-    flex-wrap: wrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  // BS6 defaults nav-link to centered — override for sidebar toolbar
+  --nav-link-justify: flex-start;
+  --nav-link-align: center;
+
+  // Dropdown / menu panels inherit toolbar background
+  &,
+  .dropdown-menu,
+  .menu {
+    background-color: var(--plone-toolbar-bg);
   }
 
-  // --- Toolbar action items (buttons / links) ------------------------------
+  .dropdown-header,
+  .menu-header {
+    color: var(--plone-toolbar-text-color);
+  }
 
-  .toolbar-entry {
-    display: flex;
-    align-items: center;
-    padding: .375rem .75rem;
-    color: inherit;
-    text-decoration: none;
-    white-space: nowrap;
-    cursor: pointer;
-    border: none;
-    background: transparent;
+  .dropdown-menu,
+  .menu {
+    border-radius: 0;
+    min-width: 12rem;
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+
+  .nav-link,
+  .dropdown-item,
+  .menu-item {
+    color: var(--plone-toolbar-text-color);
+    align-items: flex-start;
 
     &:hover,
     &:focus {
-      background: rgb(255 255 255 / 15%);
+      background: var(--plone-toolbar-link-color);
       color: #fff;
-      outline: none;
-    }
 
-    &.active {
-      background: rgb(255 255 255 / 20%);
-    }
-  }
-
-  // --- Dividers -------------------------------------------------------------
-
-  .toolbar-separator {
-    width: 1px;
-    background: rgb(255 255 255 / 20%);
-    margin-block: .25rem;
-    flex-shrink: 0;
-  }
-
-  // --- Plone-specific toolbar actions ---------------------------------------
-
-  #plone-toolbar-edit,
-  #plone-toolbar-add,
-  #plone-toolbar-state,
-  #plone-toolbar-folder-contents,
-  #plone-toolbar-undo {
-    > a,
-    > button {
-      @extend .toolbar-entry;
-    }
-  }
-
-  // Dropdown inside the toolbar
-  .toolbar-dropdown {
-    position: relative;
-
-    .toolbar-dropdown-menu {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      z-index: $toolbar-z-index;
-      min-width: 12rem;
-      background: var(--bg-2, #343a40);
-      border: 1px solid var(--border-color);
-      list-style: none;
-      margin: 0;
-      padding: .25rem 0;
-
-      li a {
-        display: block;
-        padding: .375rem .75rem;
-        color: var(--white, #fff);
-        text-decoration: none;
-        white-space: nowrap;
-
-        &:hover {
-          background: rgb(255 255 255 / 15%);
-        }
+      .label-state-published,
+      .label-state-external {
+        color: #fff !important;
       }
     }
   }
 
+  .toolbar-header {
+    background: var(--primary-base, #007bb1);
+    padding: .5rem 1rem;
+    margin-bottom: .5rem;
+    height: var(--plone-toolbar-top-height);
+
+    a {
+      color: #fff;
+      cursor: pointer;
+
+      @include media-breakpoint-down(md) {
+        display: none;
+      }
+    }
+  }
+
+  // Workflow state labels
+  .label-state-published,
+  .label-state-external {
+    color: var(--plone-link-hover, #5ec8f5) !important;
+  }
+
+  .label-state-internally_published {
+    color: var(--plone-state-internally-published-color, #9fc) !important;
+  }
+
+  .label-state-pending {
+    color: var(--plone-state-pending, #ffc) !important;
+  }
+
+  li.active .label-state-pending,
+  .label-state-pending:hover {
+    color: var(--plone-toolbar-text-color) !important;
+  }
+
+  .label-state-draft,
+  .label-state-internal {
+    color: var(--plone-state-draft, #fc9) !important;
+  }
+
+  .label-state-private {
+    color: var(--plone-state-private, #f99) !important;
+  }
+
+  // Personal tools at the bottom of the sidebar
+  .personaltools-wrapper {
+    margin-top: auto;
+    border-top: solid 1px var(--plone-toolbar-separator-color);
+    padding: .5rem 0;
+  }
+}
+
+// --- Left sidebar — collapsed (default) ------------------------------------
+
+body.plone-toolbar-left {
+  padding-left: var(--plone-toolbar-width-collapsed);
+
+  .toolbar-expand,
+  .toolbar-collapse {
+    display: none;
+  }
+
+  #edit-zone {
+    .nav-link {
+      display: flex;
+      width: 100%;
+      padding-right: .5rem;
+
+      .plone-icon {
+        margin-top: .25em;
+        margin-right: .5em;
+        flex-shrink: 0;
+      }
+
+      .toolbar-label {
+        flex-grow: 1;
+      }
+
+      &::after {
+        margin-top: .5em;
+        width: .3em;
+        height: .3em;
+      }
+    }
+
+    .border-top {
+      border-top-color: var(--plone-toolbar-separator-color);
+    }
+  }
+
+  .toolbar-expand {
+    display: block;
+  }
+
+  #edit-zone {
+    visibility: visible !important;
+    transform: none;
+    transition: none;
+    width: var(--plone-toolbar-width-collapsed);
+
+    .toolbar-label {
+      display: none;
+    }
+  }
+
+  // Expanded sidebar (md and up only)
   @include media-breakpoint-up(md) {
-    .toolbar-entry {
-      min-height: 2.5rem;
+    &.plone-toolbar-left-expanded {
+      .toolbar-expand {
+        display: none;
+      }
+
+      .toolbar-collapse {
+        display: block;
+      }
+
+      padding-left: var(--plone-toolbar-width);
+
+      #edit-zone {
+        width: var(--plone-toolbar-width);
+
+        .toolbar-label {
+          display: inline-block;
+          white-space: initial;
+          hyphens: auto;
+          word-break: break-word;
+          vertical-align: top;
+        }
+      }
+    }
+  }
+}
+
+// --- Top bar — mobile fallback (collapsed to left strip) -------------------
+
+body.plone-toolbar-top {
+  padding-left: var(--plone-toolbar-width-collapsed);
+  padding-top: 0;
+
+  .toolbar-expand,
+  .toolbar-collapse {
+    display: none;
+  }
+
+  .toolbar-label {
+    display: none;
+  }
+}
+
+// --- Top bar — md and up (horizontal bar) ----------------------------------
+
+@include media-breakpoint-up(md) {
+  body.plone-toolbar-top {
+    padding-top: var(--plone-toolbar-top-height);
+    padding-left: 0;
+
+    .toolbar-collapse,
+    .toolbar-header {
+      height: 100%;
+    }
+
+    #edit-zone {
+      bottom: unset;
+      width: 100%;
+      flex-direction: row;
+      height: var(--plone-toolbar-top-height);
+
+      .plone-toolbar-main {
+        flex-direction: row;
+
+        > .border-top {
+          border-top: none;
+          border-right: solid 1px var(--plone-toolbar-separator-color);
+        }
+      }
+
+      .personaltools-wrapper {
+        margin-left: auto;
+        margin-top: 0;
+        padding: 0;
+        border-top: none;
+      }
+    }
+  }
+}
+
+// --- Top bar — mobile dropdown fix (below md) ------------------------------
+
+@include media-breakpoint-down(md) {
+  body.plone-toolbar-top {
+    #edit-zone {
+      width: var(--plone-toolbar-width-collapsed);
+
+      .nav-link {
+        padding-right: .5rem;
+
+        &.dropdown-toggle::after {
+          vertical-align: 0;
+          margin-left: 0;
+          border-top: .3em solid transparent;
+          border-right: 0;
+          border-bottom: .3em solid transparent;
+          border-left: .3em solid;
+        }
+      }
+
+      .dropdown-menu.show,
+      .menu.show {
+        display: block;
+        margin-left: var(--plone-toolbar-width-collapsed) !important;
+        margin-top: -2.5rem !important;
+      }
     }
   }
 }

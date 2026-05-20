@@ -4,14 +4,25 @@
 // Defines Plone-specific colors as Sass variables and CSS custom property
 // maps. Consumed by bootstrap6.scss via @use.
 //
+// To re-brand the theme, override $plone-primary before @use-ing this file.
+// Everything else derives from that single variable.
+//
 // Uses Bootstrap 6 native @use syntax — no @import.
 // ============================================================================
 
 @use "sass:color";
 
-// Plone brand colors
-$plone-link-color:       #007bb1 !default;
-$plone-link-hover-color: color.adjust($plone-link-color, $lightness: -15%) !default;
+// ── Single source of truth for the Plone brand color ──────────────────────
+$plone-primary: #007bb1 !default;
+
+// ── Derived brand colors ───────────────────────────────────────────────────
+$plone-link-color:       $plone-primary !default;
+$plone-link-hover-color: color.adjust($plone-primary, $lightness: -15%) !default;
+
+// Dark-mode variants (lightened for readability on dark backgrounds)
+$plone-primary-dark:          color.adjust($plone-primary, $lightness: 20%) !default;
+$plone-link-color-dark:       $plone-primary-dark !default;
+$plone-link-hover-color-dark: color.adjust($plone-primary, $lightness: 30%) !default;
 
 // Gray palette (mirrors Bootstrap 5 names for backward compatibility)
 $white:    #fff !default;
@@ -39,8 +50,8 @@ $plone-colors: (
 ) !default;
 
 $plone-colors-dark: (
-  "link":       color.adjust($plone-link-color, $lightness: 20%),
-  "link-hover": color.adjust($plone-link-color, $lightness: 10%),
+  "link":       $plone-link-color-dark,
+  "link-hover": $plone-link-hover-color-dark,
 ) !default;
 
 // State colors (form validation, alerts, etc.)

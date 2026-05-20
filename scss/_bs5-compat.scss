@@ -19,8 +19,36 @@
 //                 .dropdown-divider             .menu-divider
 //                 .dropdown-toggle              (JS-controlled; caret below)
 //
+//   Directional   .dropend, .dropstart, .dropup  removed in BS6; side-opening
+//   dropdowns                                    menus use data-bs-placement
+//
+//   Offcanvas     .offcanvas, .offcanvas-end/     .drawer (native <dialog>)
+//                 start/top/bottom, -header,
+//                 -body, .offcanvas-backdrop
+//
+//   Modal         .modal, .modal-dialog,           .dialog (native <dialog>)
+//                 .modal-content, .modal-header,   .dialog-header, -body,
+//                 .modal-body, .modal-footer,       -footer, .dialog-title
+//                 .modal-title, .modal-backdrop    ::backdrop (native)
+//
 //   Buttons       .btn-primary / .btn-success … .btn-solid  + --theme-* vars
 //                 .btn-outline-primary …        .btn-outline + --theme-* vars
+//
+//   Responsive    .d-{bp}-*, .flex-{bp}-*,       .{bp}:d-*, .{bp}:flex-*
+//   utilities     .align-items-{bp}-*,           (breakpoint prefix replaces
+//                 .justify-content-{bp}-*,        infix in all utilities)
+//                 .order-{bp}-*, .text-{bp}-*,
+//                 .float-{bp}-*
+//
+//   Navbar        .navbar-expand-{bp}            .{bp}:navbar-expand
+//   expand
+//
+//   .text-muted                                 removed (use .fg-2 / .fg-3)
+//
+//   .btn-close    background-image fallback      now requires child <svg>
+//
+//   .form-select  standalone class               removed; use .form-control
+//                                                on <select> elements
 //
 // ── What is unchanged (no compat needed) ─────────────────────────────────────
 //   .nav-tabs, .nav-pills, .nav-underline       still exist in BS6
@@ -29,9 +57,10 @@
 //   data-bs-toggle / data-bs-dismiss            attribute names unchanged
 //
 // ── JavaScript note ──────────────────────────────────────────────────────────
-//   BS5 dropdowns used data-bs-toggle="dropdown"; BS6 uses data-bs-toggle="menu".
-//   This file fixes the CSS side only. If Bootstrap 6 JS does not fall back
-//   to the old toggle value, templates must also be updated.
+//   BS5 dropdowns:  data-bs-toggle="dropdown" → BS6: data-bs-toggle="menu"
+//   BS5 offcanvas:  data-bs-toggle="offcanvas" → BS6: data-bs-toggle="drawer"
+//   Plone uses BS5 JS, so the old toggle values remain active. This file
+//   handles the CSS side only.
 // ============================================================================
 
 @use "bootstrap/scss/config" as *;
@@ -267,6 +296,684 @@
     background-color: var(--btn-bg);
     color: var(--btn-color);
     border-color: var(--btn-border-color);
+  }
+
+} // @layer components
+
+
+// ============================================================================
+// 3. Directional dropdown containers
+//
+// Bootstrap 6 removed .dropend / .dropstart / .dropup. Side-opening menus
+// now use data-bs-placement on the trigger. Plone's toolbar uses .dropend
+// for menu items that open a submenu to the right of the vertical nav bar.
+// ============================================================================
+
+@layer components {
+
+  .dropend,
+  .dropstart,
+  .dropup {
+    position: relative;
+  }
+
+  // .dropend — submenu opens to the inline-end (right in LTR)
+  .dropend {
+    > .dropdown-menu {
+      inset-block-start: 0;
+      inset-inline-start: 100%;
+      inset-inline-end: auto;
+      margin-block-start: 0;
+      margin-inline-start: .125rem;
+    }
+
+    // Override the default downward caret → right-pointing caret
+    > .dropdown-toggle::after {
+      display: inline-block;
+      margin-inline-start: .255em;
+      vertical-align: 0;
+      // Physical properties as fallback
+      border-top: .3em solid transparent;
+      border-right: 0;
+      border-bottom: .3em solid transparent;
+      border-left: .3em solid;
+      // Logical property overrides
+      border-block-start: .3em solid transparent;
+      border-inline-end: 0;
+      border-block-end: .3em solid transparent;
+      border-inline-start: .3em solid;
+    }
+  }
+
+  // .dropstart — submenu opens to the inline-start (left in LTR)
+  .dropstart {
+    > .dropdown-menu {
+      inset-block-start: 0;
+      inset-inline-end: 100%;
+      inset-inline-start: auto;
+      margin-block-start: 0;
+      margin-inline-end: .125rem;
+    }
+
+    > .dropdown-toggle {
+      &::after { display: none; } // hide downward caret
+
+      &::before {
+        display: inline-block;
+        margin-inline-end: .255em;
+        vertical-align: 0;
+        border-top: .3em solid transparent;
+        border-right: .3em solid;
+        border-bottom: .3em solid transparent;
+        border-left: 0;
+        border-block-start: .3em solid transparent;
+        border-inline-end: .3em solid;
+        border-block-end: .3em solid transparent;
+        border-inline-start: 0;
+      }
+    }
+  }
+
+  // .dropup — submenu opens upward
+  .dropup {
+    > .dropdown-menu {
+      inset-block-end: 100%;
+      inset-block-start: auto;
+      margin-block-end: .125rem;
+    }
+
+    > .dropdown-toggle::after {
+      display: inline-block;
+      margin-inline-start: .255em;
+      vertical-align: .255em;
+      border-top: 0;
+      border-right: .3em solid transparent;
+      border-bottom: .3em solid;
+      border-left: .3em solid transparent;
+    }
+  }
+
+} // @layer components
+
+
+// ============================================================================
+// 4. Offcanvas → Drawer
+//
+// Bootstrap 6 replaced the offcanvas component with a drawer that uses the
+// native <dialog> element (toggled via [open] attribute). Plone Classic UI
+// templates still use Bootstrap 5 offcanvas HTML (plain <div>s with
+// .offcanvas + .show toggled by Bootstrap 5 JS).
+//
+// This shim recreates all necessary .offcanvas-* CSS using the same visual
+// style as the BS6 drawer. The .show class triggers the open state (instead
+// of the [open] attribute used by BS6).
+//
+// The .navbar-expand-{bp} block ensures the offcanvas is shown inline when
+// the navbar is fully expanded, matching Bootstrap 5 navbar behaviour.
+// ============================================================================
+
+@layer components {
+
+  .offcanvas {
+    --offcanvas-zindex: #{$zindex-drawer};
+    --offcanvas-width: 400px;
+    --offcanvas-height: 30vh;
+    --offcanvas-padding-x: 1rem;
+    --offcanvas-padding-y: 1rem;
+    --offcanvas-bg: var(--bg-body);
+    --offcanvas-color: var(--fg-body);
+    --offcanvas-border-width: var(--border-width, 1px);
+    --offcanvas-border-color: var(--border-color-translucent);
+    --offcanvas-box-shadow: var(--box-shadow-lg);
+    --offcanvas-transition-duration: .3s;
+    --offcanvas-transition-timing: cubic-bezier(.22, 1, .36, 1);
+
+    position: fixed;
+    inset: auto;
+    z-index: var(--offcanvas-zindex);
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    color: var(--offcanvas-color);
+    visibility: hidden;
+    background-color: var(--offcanvas-bg);
+    background-clip: padding-box;
+    border: var(--offcanvas-border-width) solid var(--offcanvas-border-color);
+    outline: 0;
+    box-shadow: var(--offcanvas-box-shadow);
+    transition:
+      transform var(--offcanvas-transition-duration) var(--offcanvas-transition-timing),
+      visibility 0s var(--offcanvas-transition-duration);
+
+    &.show {
+      visibility: visible;
+      transform: none;
+      transition:
+        transform var(--offcanvas-transition-duration) var(--offcanvas-transition-timing),
+        visibility 0s;
+    }
+  }
+
+  // Placement variants (flush to viewport edge — matches BS5 behaviour)
+  .offcanvas-end {
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: var(--offcanvas-width);
+    height: 100%;
+    border-inline-end: 0; // no right border when flush to edge
+    transform: translateX(100%);
+  }
+
+  .offcanvas-start {
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: var(--offcanvas-width);
+    height: 100%;
+    border-inline-start: 0;
+    transform: translateX(-100%);
+  }
+
+  .offcanvas-top {
+    inset: 0 0 auto;
+    height: var(--offcanvas-height);
+    border-block-end: 0;
+    transform: translateY(-100%);
+  }
+
+  .offcanvas-bottom {
+    inset: auto 0 0;
+    height: var(--offcanvas-height);
+    border-block-start: 0;
+    transform: translateY(100%);
+  }
+
+  // Structure
+  .offcanvas-header {
+    display: flex;
+    align-items: center;
+    padding: var(--offcanvas-padding-y) var(--offcanvas-padding-x);
+  }
+
+  .offcanvas-title {
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+
+  .offcanvas-body {
+    flex-grow: 1;
+    padding: var(--offcanvas-padding-y) var(--offcanvas-padding-x);
+    overflow-y: auto;
+  }
+
+  // Responsive navbar integration — above the expand breakpoint the offcanvas
+  // content is shown inline (always visible, no slide-in animation needed).
+  @each $bp in sm, md, lg, xl {
+    @include media-breakpoint-up($bp) {
+      .navbar-expand-#{$bp} {
+        // stylelint-disable declaration-no-important
+        .offcanvas {
+          position: static !important;
+          z-index: auto;
+          display: flex !important;
+          flex-grow: 1;
+          width: auto !important;
+          max-width: none;
+          height: auto !important;
+          visibility: visible !important;
+          background-color: transparent !important;
+          border: 0 !important;
+          box-shadow: none !important;
+          transform: none !important;
+          transition: none !important;
+        }
+
+        .offcanvas-header { display: none; }
+
+        .offcanvas-body {
+          display: flex;
+          flex-grow: 0;
+          padding: 0;
+          overflow-y: visible;
+        }
+        // stylelint-enable declaration-no-important
+      }
+    }
+  }
+
+  // Backdrop — shown while offcanvas is open (BS5 JS creates and removes it)
+  // BS6 uses native ::backdrop on <dialog>; this replicates it for <div>-based
+  // offcanvas panels that Bootstrap 5 JS controls.
+  .offcanvas-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: #{$zindex-drawer - 1}; // 1044 — below the drawer/offcanvas panel
+    background-color: rgb(0 0 0 / 50%);
+
+    &.fade { opacity: 0; }
+    &.show { opacity: 1; }
+  }
+
+} // @layer components
+
+
+// ============================================================================
+// 5. Responsive utility classes — old BS5 breakpoint-infix format
+//
+// Bootstrap 6 moved the breakpoint from an infix to a prefix:
+//   Before (BS5):  .d-lg-flex, .align-items-lg-start, .flex-lg-row
+//   After  (BS6):  .lg\:d-flex, .lg\:align-items-start, .lg\:flex-row
+//
+// Plone Classic UI templates (index.html, plone.app.layout) use the old
+// infix format. This section regenerates those rules for breakpoints
+// sm, md, lg, xl using Bootstrap 6's media-breakpoint-up() mixin.
+//
+// Coverage: display, flex-direction, flex-wrap, flex-grow/shrink,
+//           align-items, align-self, justify-content, order,
+//           text-align, float.
+// ============================================================================
+
+@layer components {
+
+  $bs5-util-breakpoints: (sm, md, lg, xl);
+
+  @each $bp in $bs5-util-breakpoints {
+    @include media-breakpoint-up($bp) {
+
+      // Display
+      @each $val in none, inline, inline-block, block, grid, flex, inline-flex, table, table-row, table-cell {
+        .d-#{$bp}-#{$val} { display: $val !important; }
+      }
+
+      // Flex direction
+      .flex-#{$bp}-row            { flex-direction: row !important; }
+      .flex-#{$bp}-column         { flex-direction: column !important; }
+      .flex-#{$bp}-row-reverse    { flex-direction: row-reverse !important; }
+      .flex-#{$bp}-column-reverse { flex-direction: column-reverse !important; }
+
+      // Flex wrap
+      .flex-#{$bp}-wrap           { flex-wrap: wrap !important; }
+      .flex-#{$bp}-nowrap         { flex-wrap: nowrap !important; }
+      .flex-#{$bp}-wrap-reverse   { flex-wrap: wrap-reverse !important; }
+
+      // Flex grow / shrink
+      .flex-#{$bp}-fill           { flex: 1 1 auto !important; }
+      .flex-#{$bp}-grow-0         { flex-grow: 0 !important; }
+      .flex-#{$bp}-grow-1         { flex-grow: 1 !important; }
+      .flex-#{$bp}-shrink-0       { flex-shrink: 0 !important; }
+      .flex-#{$bp}-shrink-1       { flex-shrink: 1 !important; }
+
+      // Align-items
+      .align-items-#{$bp}-start    { align-items: flex-start !important; }
+      .align-items-#{$bp}-end      { align-items: flex-end !important; }
+      .align-items-#{$bp}-center   { align-items: center !important; }
+      .align-items-#{$bp}-baseline { align-items: baseline !important; }
+      .align-items-#{$bp}-stretch  { align-items: stretch !important; }
+
+      // Align-self
+      .align-self-#{$bp}-auto     { align-self: auto !important; }
+      .align-self-#{$bp}-start    { align-self: flex-start !important; }
+      .align-self-#{$bp}-end      { align-self: flex-end !important; }
+      .align-self-#{$bp}-center   { align-self: center !important; }
+      .align-self-#{$bp}-baseline { align-self: baseline !important; }
+      .align-self-#{$bp}-stretch  { align-self: stretch !important; }
+
+      // Justify-content
+      .justify-content-#{$bp}-start   { justify-content: flex-start !important; }
+      .justify-content-#{$bp}-end     { justify-content: flex-end !important; }
+      .justify-content-#{$bp}-center  { justify-content: center !important; }
+      .justify-content-#{$bp}-between { justify-content: space-between !important; }
+      .justify-content-#{$bp}-around  { justify-content: space-around !important; }
+      .justify-content-#{$bp}-evenly  { justify-content: space-evenly !important; }
+
+      // Order
+      .order-#{$bp}-first { order: -1 !important; }
+      .order-#{$bp}-last  { order: 6 !important; }
+      @for $i from 0 through 5 {
+        .order-#{$bp}-#{$i} { order: $i !important; }
+      }
+
+      // Text alignment
+      .text-#{$bp}-start  { text-align: start !important; }
+      .text-#{$bp}-end    { text-align: end !important; }
+      .text-#{$bp}-center { text-align: center !important; }
+
+      // Float (logical properties)
+      .float-#{$bp}-start { float: inline-start !important; }
+      .float-#{$bp}-end   { float: inline-end !important; }
+      .float-#{$bp}-none  { float: none !important; }
+
+    } // media-breakpoint-up
+  } // @each $bp
+
+} // @layer components
+
+
+// ============================================================================
+// 6. Navbar expand — .navbar-expand-{bp} structural styles
+//
+// Bootstrap 6 renamed .navbar-expand-lg to .lg\:navbar-expand. Without this
+// compat, the navbar toggler stays visible on all screen sizes and the nav
+// items stack vertically instead of flowing horizontally.
+//
+// The offcanvas inline-display override is in Section 4.
+// ============================================================================
+
+@layer components {
+
+  @each $bp in sm, md, lg, xl {
+    @include media-breakpoint-up($bp) {
+      .navbar-expand-#{$bp} {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+
+        .navbar-nav {
+          flex-direction: row;
+
+          .nav-link {
+            padding-block: var(--nav-link-padding-y, .5rem);
+            padding-inline: var(--nav-link-padding-x, 1rem);
+          }
+        }
+
+        .navbar-toggler { display: none; }
+      }
+    }
+  }
+
+} // @layer components
+
+
+// ============================================================================
+// 7. Misc removed / changed utility classes
+//
+// .text-muted    Removed from BS6 color utilities.
+//                Maps to var(--fg-3) — the subdued body-foreground token.
+//
+// .btn-close     BS6 requires a child <svg> for the × icon. Plone templates
+//                use <button class="btn-close"> (no child element). This adds
+//                a background-image fallback via CSS :has() so the icon
+//                renders without template changes. :has() is supported in all
+//                evergreen browsers since Safari 16.4 / Chrome 105 (2022).
+//
+// .btn-close-white  BS5 helper that inverts the icon to white.
+//
+// .form-select   BS6 removed standalone .form-select; <select> elements are
+//                styled via .form-control. This compat rule recreates the
+//                styled select appearance using the same BS6 form-control
+//                CSS custom properties.
+// ============================================================================
+
+@layer components {
+
+  // .text-muted → subdued foreground
+  .text-muted {
+    color: var(--fg-3, var(--secondary-color, rgb(108 117 125))) !important;
+  }
+
+  // .btn-close — background-image fallback for buttons without a child <svg>
+  // stylelint-disable function-url-quotes
+  .btn-close:not(:has(> svg)) {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='currentcolor'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: var(--btn-close-size, 1.25rem);
+  }
+  // stylelint-enable function-url-quotes
+
+  // .btn-close-white — invert icon to white (BS5 dark-background helper)
+  .btn-close-white {
+    filter: var(--btn-close-filter-dark, invert(1) grayscale(100%) brightness(200%));
+    opacity: 1;
+  }
+
+  // .form-select — styled <select> wrapper (removed standalone in BS6)
+  // Uses the same CSS custom properties as .form-control for consistency.
+  .form-select {
+    display: block;
+    width: 100%;
+    padding-block: var(--form-control-padding-y, .375rem);
+    padding-inline-start: var(--form-control-padding-x, .75rem);
+    padding-inline-end: var(--form-select-indicator-padding, 2.25rem);
+    font-size: var(--form-control-font-size, 1rem);
+    font-weight: var(--form-control-font-weight, 400);
+    line-height: var(--form-control-line-height, 1.5);
+    color: var(--form-control-color, var(--fg-body));
+    background-color: var(--form-control-bg, var(--bg-body));
+    // stylelint-disable function-url-quotes
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    // stylelint-enable function-url-quotes
+    background-repeat: no-repeat;
+    background-position: right .75rem center;
+    background-size: 16px 12px;
+    border: var(--form-control-border-width, 1px) solid var(--form-control-border-color, var(--border-color));
+    border-radius: var(--form-control-border-radius, var(--radius-4, .375rem));
+    appearance: none;
+
+    &:focus {
+      border-color: var(--form-control-focus-border-color, var(--primary-base));
+      outline: 0;
+      box-shadow: 0 0 0 .25rem color-mix(in srgb, var(--primary-base, #0d6efd) 25%, transparent);
+    }
+
+    &[multiple],
+    &[size]:not([size="1"]) {
+      padding-inline-end: var(--form-control-padding-x, .75rem);
+      background-image: none;
+    }
+  }
+
+} // @layer components
+
+// =============================================================================
+// Section 8: Bootstrap 5 CSS custom properties (--bs-* variables)
+//
+// Mockup components (pat-contentbrowser, pat-relateditems, etc.) reference
+// Bootstrap 5 custom properties via the --bs- prefix. Bootstrap 6 dropped
+// this prefix entirely. These :root declarations create --bs-* aliases that
+// resolve to the corresponding Bootstrap 6 tokens, so Mockup components work
+// without source changes.
+//
+// --bs-secondary-bg-rgb / --bs-primary-rgb use bare comma-separated sRGB
+// values (Bootstrap 5 convention) so that rgba(var(--bs-*-rgb), alpha)
+// expressions in Svelte component styles continue to work.
+// =============================================================================
+
+:root {
+  // Layout / border tokens
+  --bs-body-bg:            var(--bg-body);
+  --bs-border-color:       var(--border-color);
+  --bs-border-radius:      var(--radius-3, 0.25rem);
+  --bs-border-style:       var(--border-style, solid);
+  --bs-border-width:       var(--border-width, 1px);
+
+  // Color tokens
+  --bs-primary:            var(--primary-base);
+  --bs-light:              var(--bg-3);                // light-dark(gray-100, gray-800)
+  --bs-light-bg-subtle:    var(--secondary-bg-subtle); // light-dark(gray-050, gray-800)
+
+  // Button tokens (default / md size)
+  --bs-btn-padding-y:      var(--btn-input-padding-y, 0.375rem);
+  --bs-btn-padding-x:      var(--btn-input-padding-x, 0.75rem);
+  --bs-btn-font-size:      var(--btn-input-font-size, 1rem);
+
+  // RGB variables for rgba() in legacy components
+  // Approximate Bootstrap 5 defaults; used for transparency overlays only.
+  --bs-primary-rgb:        13, 110, 253;   // ≈ #0d6efd (BS5 primary)
+  --bs-secondary-bg-rgb:   233, 236, 239;  // ≈ #e9ecef (BS5 secondary-bg)
+}
+
+// ============================================================================
+// 9. Modal → Dialog
+//
+// Bootstrap 6 replaced the .modal component with the native <dialog> element
+// styled via .dialog-*. Mockup's pat-plone-modal still generates Bootstrap 5
+// .modal HTML (plain <div>s, not <dialog> elements). This shim provides all
+// .modal-* CSS using Bootstrap 6 design tokens so the visual result matches
+// the BS6 dialog component.
+//
+// HTML structure generated by pat-plone-modal (mockup/src/pat/modal/modal.js):
+//   .modal.fade[.show]                         ← full-viewport scroll host
+//     .modal-dialog[.modal-dialog-centered]
+//       .modal-content                         ← the styled card
+//         .modal-header
+//           .modal-title
+//           .btn-close.modal-close
+//         .modal-body
+//         .modal-footer
+//           .pattern-modal-buttons
+//
+//   Backdrop: <div class="modal-backdrop">     ← .show or .backdrop-active
+//
+// body.modal-open prevents background scroll while the modal is open.
+// ============================================================================
+
+@layer components {
+
+  // body class added by BS5 JS to prevent background scroll
+  body.modal-open { overflow: hidden; }
+
+  // Backdrop — rendered behind the modal dialog
+  // BS6 uses native ::backdrop on <dialog>; this replicates it for <div>-based
+  // modals that Bootstrap 5 JS controls. Mockup uses .backdrop-active instead
+  // of the BS5 .show class, so we support both.
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: #{$zindex-dialog - 1}; // 1054 — directly below modal
+    background-color: rgb(0 0 0 / 50%);
+    opacity: 0;
+    transition: opacity var(--dialog-transition-duration, .3s) ease-in-out;
+
+    &.show,
+    &.backdrop-active { opacity: 1; }
+  }
+
+  // Outer container — full-viewport, acts as scroll host and stacking context
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: #{$zindex-dialog}; // 1055
+    display: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+
+    &.show { display: block; }
+  }
+
+  // Slide-in animation when .fade is present (matches BS6 dialog-slide-down)
+  .modal.fade .modal-dialog {
+    opacity: 0;
+    transform: translateY(-3rem);
+    transition:
+      opacity var(--dialog-transition-duration, .3s) var(--dialog-transition-timing, cubic-bezier(.22, 1, .36, 1)),
+      transform var(--dialog-transition-duration, .3s) var(--dialog-transition-timing, cubic-bezier(.22, 1, .36, 1));
+  }
+
+  .modal.show .modal-dialog {
+    opacity: 1;
+    transform: none;
+  }
+
+  // Inner wrapper — centers the content card, enforces max-width
+  .modal-dialog {
+    position: relative;
+    width: auto;
+    max-width: var(--dialog-width, 500px);
+    margin: var(--dialog-margin, 1.75rem) auto;
+    pointer-events: none;
+  }
+
+  // Vertically centered variant
+  .modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - var(--dialog-margin, 1.75rem) * 2);
+  }
+
+  // Scrollable body variant
+  .modal-dialog-scrollable {
+    height: calc(100% - var(--dialog-margin, 1.75rem) * 2);
+
+    .modal-content { max-height: 100%; overflow: hidden; }
+    .modal-body    { overflow-y: auto; }
+  }
+
+  // Size variants — override --dialog-width per the BS6 dialog token pattern
+  .modal-sm { max-width: 280px; }
+  .modal-lg { max-width: 800px; }
+  .modal-xl { max-width: 1140px; }
+
+  .modal-fullscreen {
+    width: 100vw;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+
+    .modal-content {
+      height: 100%;
+      border: 0;
+      border-radius: 0;
+    }
+  }
+
+  // Content card — the visible styled box
+  .modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color: var(--fg-body);
+    background-color: var(--bg-body);
+    background-clip: padding-box;
+    border: var(--border-width, 1px) solid var(--border-color-translucent);
+    border-radius: var(--radius-7, .5rem);
+    box-shadow: var(--box-shadow-lg);
+    pointer-events: auto;
+    outline: 0;
+  }
+
+  // Header section
+  .modal-header {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: var(--border-width, 1px) solid var(--border-color);
+    border-top-left-radius: var(--radius-7, .5rem);
+    border-top-right-radius: var(--radius-7, .5rem);
+
+    .btn-close { margin-inline-start: auto; }
+  }
+
+  // Title text
+  .modal-title {
+    margin-bottom: 0;
+    line-height: 1.5;
+    font-size: var(--font-size-lg, 1.25rem);
+    font-weight: var(--font-weight-semibold, 600);
+  }
+
+  // Main content area
+  .modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    padding: 1rem;
+  }
+
+  // Footer — action button row
+  .modal-footer {
+    display: flex;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .5rem;
+    padding: 1rem;
+    border-top: var(--border-width, 1px) solid var(--border-color);
+    border-bottom-left-radius: var(--radius-7, .5rem);
+    border-bottom-right-radius: var(--radius-7, .5rem);
   }
 
 } // @layer components
