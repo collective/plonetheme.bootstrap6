@@ -52,9 +52,14 @@ $toolbar-backdrop-z-index: #{$zindex-drawer} !default;
   color: var(--plone-toolbar-text-color);
   border-right: none;
 
-  // BS6 defaults nav-link to centered — override for sidebar toolbar
-  --nav-link-justify: flex-start;
-  --nav-link-align: center;
+  // BS6 emits --nav-link-justify: center on .nav itself (via @include tokens).
+  // Setting the variable on #edit-zone is not sufficient because .nav is a
+  // closer ancestor to .nav-link and re-introduces the centered default.
+  // Override on .nav directly so .nav-link resolves flex-start.
+  .nav {
+    --nav-link-justify: flex-start;
+    --nav-link-align: center;
+  }
 
   // Dropdown / menu panels inherit toolbar background
   &,
@@ -76,10 +81,27 @@ $toolbar-backdrop-z-index: #{$zindex-drawer} !default;
     max-height: 100vh;
   }
 
-  .nav-link,
+  .nav-link {
+    color: var(--plone-toolbar-text-color);
+    // align-items is controlled by --nav-link-align on .nav above (center)
+
+    &:hover,
+    &:focus {
+      background: var(--plone-toolbar-link-color);
+      color: #fff;
+
+      .label-state-published,
+      .label-state-external {
+        color: #fff !important;
+      }
+    }
+  }
+
   .dropdown-item,
   .menu-item {
     color: var(--plone-toolbar-text-color);
+    // compat shim sets align-items: center; override to flex-start so icons
+    // stay top-aligned on multi-line text items
     align-items: flex-start;
 
     &:hover,

@@ -16802,84 +16802,84 @@
 }
 @layer components {
   .btn-primary {
-    --btn-bg: var(--primary-base);
+    --btn-bg: var(--primary-bg);
     --btn-color: var(--primary-contrast);
-    --btn-border-color: var(--primary-base);
-    --btn-hover-bg: oklch(from var(--primary-base) calc(l * .95) calc(c * 1.1) h);
-    --btn-hover-border-color: oklch(from var(--primary-base) calc(l * .95) calc(c * 1.1) h);
+    --btn-border-color: var(--primary-bg);
+    --btn-hover-bg: oklch(from var(--primary-bg) calc(l * .95) calc(c * 1.1) h);
+    --btn-hover-border-color: oklch(from var(--primary-bg) calc(l * .95) calc(c * 1.1) h);
     --btn-hover-color: var(--primary-contrast);
-    --btn-active-bg: oklch(from var(--primary-base) calc(l * .9) calc(c * 1.15) h);
-    --btn-active-border-color: oklch(from var(--primary-base) calc(l * .9) calc(c * 1.15) h);
+    --btn-active-bg: oklch(from var(--primary-bg) calc(l * .9) calc(c * 1.15) h);
+    --btn-active-border-color: oklch(from var(--primary-bg) calc(l * .9) calc(c * 1.15) h);
     --btn-active-color: var(--primary-contrast);
     background-color: var(--btn-bg);
     color: var(--btn-color);
     border-color: var(--btn-border-color);
   }
   .btn-secondary {
-    --btn-bg: var(--secondary-base);
+    --btn-bg: var(--secondary-bg);
     --btn-color: var(--secondary-contrast);
-    --btn-border-color: var(--secondary-base);
-    --btn-hover-bg: oklch(from var(--secondary-base) calc(l * .95) calc(c * 1.1) h);
-    --btn-hover-border-color: oklch(from var(--secondary-base) calc(l * .95) calc(c * 1.1) h);
+    --btn-border-color: var(--secondary-bg);
+    --btn-hover-bg: oklch(from var(--secondary-bg) calc(l * .95) calc(c * 1.1) h);
+    --btn-hover-border-color: oklch(from var(--secondary-bg) calc(l * .95) calc(c * 1.1) h);
     --btn-hover-color: var(--secondary-contrast);
-    --btn-active-bg: oklch(from var(--secondary-base) calc(l * .9) calc(c * 1.15) h);
-    --btn-active-border-color: oklch(from var(--secondary-base) calc(l * .9) calc(c * 1.15) h);
+    --btn-active-bg: oklch(from var(--secondary-bg) calc(l * .9) calc(c * 1.15) h);
+    --btn-active-border-color: oklch(from var(--secondary-bg) calc(l * .9) calc(c * 1.15) h);
     --btn-active-color: var(--secondary-contrast);
     background-color: var(--btn-bg);
     color: var(--btn-color);
     border-color: var(--btn-border-color);
   }
   .btn-success {
-    --btn-bg: var(--success-base);
+    --btn-bg: var(--success-bg);
     --btn-color: var(--success-contrast);
-    --btn-border-color: var(--success-base);
-    --btn-hover-bg: oklch(from var(--success-base) calc(l * .95) calc(c * 1.1) h);
-    --btn-hover-border-color: oklch(from var(--success-base) calc(l * .95) calc(c * 1.1) h);
+    --btn-border-color: var(--success-bg);
+    --btn-hover-bg: oklch(from var(--success-bg) calc(l * .95) calc(c * 1.1) h);
+    --btn-hover-border-color: oklch(from var(--success-bg) calc(l * .95) calc(c * 1.1) h);
     --btn-hover-color: var(--success-contrast);
-    --btn-active-bg: oklch(from var(--success-base) calc(l * .9) calc(c * 1.15) h);
-    --btn-active-border-color: oklch(from var(--success-base) calc(l * .9) calc(c * 1.15) h);
+    --btn-active-bg: oklch(from var(--success-bg) calc(l * .9) calc(c * 1.15) h);
+    --btn-active-border-color: oklch(from var(--success-bg) calc(l * .9) calc(c * 1.15) h);
     --btn-active-color: var(--success-contrast);
     background-color: var(--btn-bg);
     color: var(--btn-color);
     border-color: var(--btn-border-color);
   }
   .btn-danger {
-    --btn-bg: var(--danger-base);
+    --btn-bg: var(--danger-bg);
     --btn-color: var(--danger-contrast);
-    --btn-border-color: var(--danger-base);
-    --btn-hover-bg: oklch(from var(--danger-base) calc(l * .95) calc(c * 1.1) h);
-    --btn-hover-border-color: oklch(from var(--danger-base) calc(l * .95) calc(c * 1.1) h);
+    --btn-border-color: var(--danger-bg);
+    --btn-hover-bg: oklch(from var(--danger-bg) calc(l * .95) calc(c * 1.1) h);
+    --btn-hover-border-color: oklch(from var(--danger-bg) calc(l * .95) calc(c * 1.1) h);
     --btn-hover-color: var(--danger-contrast);
-    --btn-active-bg: oklch(from var(--danger-base) calc(l * .9) calc(c * 1.15) h);
-    --btn-active-border-color: oklch(from var(--danger-base) calc(l * .9) calc(c * 1.15) h);
+    --btn-active-bg: oklch(from var(--danger-bg) calc(l * .9) calc(c * 1.15) h);
+    --btn-active-border-color: oklch(from var(--danger-bg) calc(l * .9) calc(c * 1.15) h);
     --btn-active-color: var(--danger-contrast);
     background-color: var(--btn-bg);
     color: var(--btn-color);
     border-color: var(--btn-border-color);
   }
   .btn-warning {
-    --btn-bg: var(--warning-base);
+    --btn-bg: var(--warning-bg);
     --btn-color: var(--warning-contrast);
-    --btn-border-color: var(--warning-base);
-    --btn-hover-bg: oklch(from var(--warning-base) calc(l * .95) calc(c * 1.1) h);
-    --btn-hover-border-color: oklch(from var(--warning-base) calc(l * .95) calc(c * 1.1) h);
+    --btn-border-color: var(--warning-bg);
+    --btn-hover-bg: oklch(from var(--warning-bg) calc(l * .95) calc(c * 1.1) h);
+    --btn-hover-border-color: oklch(from var(--warning-bg) calc(l * .95) calc(c * 1.1) h);
     --btn-hover-color: var(--warning-contrast);
-    --btn-active-bg: oklch(from var(--warning-base) calc(l * .9) calc(c * 1.15) h);
-    --btn-active-border-color: oklch(from var(--warning-base) calc(l * .9) calc(c * 1.15) h);
+    --btn-active-bg: oklch(from var(--warning-bg) calc(l * .9) calc(c * 1.15) h);
+    --btn-active-border-color: oklch(from var(--warning-bg) calc(l * .9) calc(c * 1.15) h);
     --btn-active-color: var(--warning-contrast);
     background-color: var(--btn-bg);
     color: var(--btn-color);
     border-color: var(--btn-border-color);
   }
   .btn-info {
-    --btn-bg: var(--info-base);
+    --btn-bg: var(--info-bg);
     --btn-color: var(--info-contrast);
-    --btn-border-color: var(--info-base);
-    --btn-hover-bg: oklch(from var(--info-base) calc(l * .95) calc(c * 1.1) h);
-    --btn-hover-border-color: oklch(from var(--info-base) calc(l * .95) calc(c * 1.1) h);
+    --btn-border-color: var(--info-bg);
+    --btn-hover-bg: oklch(from var(--info-bg) calc(l * .95) calc(c * 1.1) h);
+    --btn-hover-border-color: oklch(from var(--info-bg) calc(l * .95) calc(c * 1.1) h);
     --btn-hover-color: var(--info-contrast);
-    --btn-active-bg: oklch(from var(--info-base) calc(l * .9) calc(c * 1.15) h);
-    --btn-active-border-color: oklch(from var(--info-base) calc(l * .9) calc(c * 1.15) h);
+    --btn-active-bg: oklch(from var(--info-bg) calc(l * .9) calc(c * 1.15) h);
+    --btn-active-border-color: oklch(from var(--info-bg) calc(l * .9) calc(c * 1.15) h);
     --btn-active-color: var(--info-contrast);
     background-color: var(--btn-bg);
     color: var(--btn-color);
@@ -16912,84 +16912,84 @@
   }
   .btn-outline-primary {
     --btn-bg: transparent;
-    --btn-color: var(--primary-base);
-    --btn-border-color: var(--primary-base);
-    --btn-hover-bg: var(--primary-base);
+    --btn-color: var(--primary-bg);
+    --btn-border-color: var(--primary-bg);
+    --btn-hover-bg: var(--primary-bg);
     --btn-hover-color: var(--primary-contrast);
-    --btn-hover-border-color: var(--primary-base);
-    --btn-active-bg: var(--primary-base);
+    --btn-hover-border-color: var(--primary-bg);
+    --btn-active-bg: var(--primary-bg);
     --btn-active-color: var(--primary-contrast);
-    --btn-active-border-color: var(--primary-base);
+    --btn-active-border-color: var(--primary-bg);
     background-color: var(--btn-bg);
     color: var(--btn-color);
     border-color: var(--btn-border-color);
   }
   .btn-outline-secondary {
     --btn-bg: transparent;
-    --btn-color: var(--secondary-base);
-    --btn-border-color: var(--secondary-base);
-    --btn-hover-bg: var(--secondary-base);
+    --btn-color: var(--secondary-bg);
+    --btn-border-color: var(--secondary-bg);
+    --btn-hover-bg: var(--secondary-bg);
     --btn-hover-color: var(--secondary-contrast);
-    --btn-hover-border-color: var(--secondary-base);
-    --btn-active-bg: var(--secondary-base);
+    --btn-hover-border-color: var(--secondary-bg);
+    --btn-active-bg: var(--secondary-bg);
     --btn-active-color: var(--secondary-contrast);
-    --btn-active-border-color: var(--secondary-base);
+    --btn-active-border-color: var(--secondary-bg);
     background-color: var(--btn-bg);
     color: var(--btn-color);
     border-color: var(--btn-border-color);
   }
   .btn-outline-success {
     --btn-bg: transparent;
-    --btn-color: var(--success-base);
-    --btn-border-color: var(--success-base);
-    --btn-hover-bg: var(--success-base);
+    --btn-color: var(--success-bg);
+    --btn-border-color: var(--success-bg);
+    --btn-hover-bg: var(--success-bg);
     --btn-hover-color: var(--success-contrast);
-    --btn-hover-border-color: var(--success-base);
-    --btn-active-bg: var(--success-base);
+    --btn-hover-border-color: var(--success-bg);
+    --btn-active-bg: var(--success-bg);
     --btn-active-color: var(--success-contrast);
-    --btn-active-border-color: var(--success-base);
+    --btn-active-border-color: var(--success-bg);
     background-color: var(--btn-bg);
     color: var(--btn-color);
     border-color: var(--btn-border-color);
   }
   .btn-outline-danger {
     --btn-bg: transparent;
-    --btn-color: var(--danger-base);
-    --btn-border-color: var(--danger-base);
-    --btn-hover-bg: var(--danger-base);
+    --btn-color: var(--danger-bg);
+    --btn-border-color: var(--danger-bg);
+    --btn-hover-bg: var(--danger-bg);
     --btn-hover-color: var(--danger-contrast);
-    --btn-hover-border-color: var(--danger-base);
-    --btn-active-bg: var(--danger-base);
+    --btn-hover-border-color: var(--danger-bg);
+    --btn-active-bg: var(--danger-bg);
     --btn-active-color: var(--danger-contrast);
-    --btn-active-border-color: var(--danger-base);
+    --btn-active-border-color: var(--danger-bg);
     background-color: var(--btn-bg);
     color: var(--btn-color);
     border-color: var(--btn-border-color);
   }
   .btn-outline-warning {
     --btn-bg: transparent;
-    --btn-color: var(--warning-base);
-    --btn-border-color: var(--warning-base);
-    --btn-hover-bg: var(--warning-base);
+    --btn-color: var(--warning-bg);
+    --btn-border-color: var(--warning-bg);
+    --btn-hover-bg: var(--warning-bg);
     --btn-hover-color: var(--warning-contrast);
-    --btn-hover-border-color: var(--warning-base);
-    --btn-active-bg: var(--warning-base);
+    --btn-hover-border-color: var(--warning-bg);
+    --btn-active-bg: var(--warning-bg);
     --btn-active-color: var(--warning-contrast);
-    --btn-active-border-color: var(--warning-base);
+    --btn-active-border-color: var(--warning-bg);
     background-color: var(--btn-bg);
     color: var(--btn-color);
     border-color: var(--btn-border-color);
   }
   .btn-outline-info {
     --btn-bg: transparent;
-    --btn-color: var(--info-base);
-    --btn-border-color: var(--info-base);
-    --btn-hover-bg: var(--info-base);
+    --btn-color: var(--info-bg);
+    --btn-border-color: var(--info-bg);
+    --btn-hover-bg: var(--info-bg);
     --btn-hover-color: var(--info-contrast);
-    --btn-hover-border-color: var(--info-base);
-    --btn-active-bg: var(--info-base);
+    --btn-hover-border-color: var(--info-bg);
+    --btn-active-bg: var(--info-bg);
     --btn-active-color: var(--info-contrast);
-    --btn-active-border-color: var(--info-base);
+    --btn-active-border-color: var(--info-bg);
     background-color: var(--btn-bg);
     color: var(--btn-color);
     border-color: var(--btn-border-color);
@@ -18590,6 +18590,8 @@ a:hover {
   width: var(--plone-toolbar-width);
   color: var(--plone-toolbar-text-color);
   border-right: none;
+}
+#edit-zone .nav {
   --nav-link-justify: flex-start;
   --nav-link-align: center;
 }
@@ -18609,26 +18611,31 @@ a:hover {
   overflow-y: auto;
   max-height: 100vh;
 }
-#edit-zone .nav-link,
-#edit-zone .dropdown-item,
-#edit-zone .menu-item {
+#edit-zone .nav-link {
   color: var(--plone-toolbar-text-color);
-  align-items: flex-start;
 }
-#edit-zone .nav-link:hover, #edit-zone .nav-link:focus,
-#edit-zone .dropdown-item:hover,
-#edit-zone .dropdown-item:focus,
-#edit-zone .menu-item:hover,
-#edit-zone .menu-item:focus {
+#edit-zone .nav-link:hover, #edit-zone .nav-link:focus {
   background: var(--plone-toolbar-link-color);
   color: #fff;
 }
 #edit-zone .nav-link:hover .label-state-published,
 #edit-zone .nav-link:hover .label-state-external, #edit-zone .nav-link:focus .label-state-published,
-#edit-zone .nav-link:focus .label-state-external,
+#edit-zone .nav-link:focus .label-state-external {
+  color: #fff !important;
+}
+#edit-zone .dropdown-item,
+#edit-zone .menu-item {
+  color: var(--plone-toolbar-text-color);
+  align-items: flex-start;
+}
+#edit-zone .dropdown-item:hover, #edit-zone .dropdown-item:focus,
+#edit-zone .menu-item:hover,
+#edit-zone .menu-item:focus {
+  background: var(--plone-toolbar-link-color);
+  color: #fff;
+}
 #edit-zone .dropdown-item:hover .label-state-published,
-#edit-zone .dropdown-item:hover .label-state-external,
-#edit-zone .dropdown-item:focus .label-state-published,
+#edit-zone .dropdown-item:hover .label-state-external, #edit-zone .dropdown-item:focus .label-state-published,
 #edit-zone .dropdown-item:focus .label-state-external,
 #edit-zone .menu-item:hover .label-state-published,
 #edit-zone .menu-item:hover .label-state-external,
