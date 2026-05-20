@@ -32,8 +32,13 @@ $breadcrumb-margin-bottom: 2rem !default;
   }
 
   .breadcrumb-item {
+    // BS6 dropped the ::before separator in favour of a .breadcrumb-divider
+    // DOM element. Plone's path_bar.pt still uses plain breadcrumb-item li
+    // elements, so we restore the Barceloneta/BS5 separator here.
     + .breadcrumb-item::before {
-      color: var(--secondary-color, #6c757d);
+      content: "/";
+      padding-inline: .5rem;
+      color: var(--breadcrumb-divider-color, var(--fg-4, #6c757d));
     }
 
     &.active {

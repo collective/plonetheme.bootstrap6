@@ -415,18 +415,19 @@
 @layer components {
 
   .offcanvas {
-    --offcanvas-zindex: #{$zindex-drawer};
-    --offcanvas-width: 400px;
-    --offcanvas-height: 30vh;
-    --offcanvas-padding-x: 1rem;
-    --offcanvas-padding-y: 1rem;
-    --offcanvas-bg: var(--bg-body);
-    --offcanvas-color: var(--fg-body);
-    --offcanvas-border-width: var(--border-width, 1px);
-    --offcanvas-border-color: var(--border-color-translucent);
-    --offcanvas-box-shadow: var(--box-shadow-lg);
-    --offcanvas-transition-duration: .3s;
-    --offcanvas-transition-timing: cubic-bezier(.22, 1, .36, 1);
+    --offcanvas-zindex:        #{$zindex-drawer};
+    --offcanvas-width:         400px;
+    --offcanvas-height:        30vh;
+    --offcanvas-padding-x:     1rem;
+    --offcanvas-padding-y:     1rem;
+    --offcanvas-bg:            var(--bg-body);
+    --offcanvas-color:         var(--fg-body);
+    --offcanvas-border-width:  var(--border-width, 1px);
+    --offcanvas-border-color:  var(--border-color-translucent);
+    --offcanvas-box-shadow:    var(--box-shadow-lg);
+    // Single transition token — mirrors BS5 .offcanvas transition property.
+    // BS5 Offcanvas JS waits for transitionend on transform, so keep it simple.
+    --offcanvas-transition:    transform .3s ease-in-out;
 
     position: fixed;
     inset: auto;
@@ -441,16 +442,23 @@
     border: var(--offcanvas-border-width) solid var(--offcanvas-border-color);
     outline: 0;
     box-shadow: var(--offcanvas-box-shadow);
-    transition:
-      transform var(--offcanvas-transition-duration) var(--offcanvas-transition-timing),
-      visibility 0s var(--offcanvas-transition-duration);
+    transition: var(--offcanvas-transition);
 
+    @media (prefers-reduced-motion: reduce) { transition: none; }
+
+    // State classes toggled by Bootstrap 5 Offcanvas JS:
+    //   .showing  → opening  (transform: none triggers the CSS transition)
+    //   .show     → open     (fully visible, no transform)
+    //   .hiding   → closing  (transform reverts to placement default, stays visible)
+    &.showing,
+    &.show:not(.hiding) {
+      transform: none;
+    }
+
+    &.showing,
+    &.hiding,
     &.show {
       visibility: visible;
-      transform: none;
-      transition:
-        transform var(--offcanvas-transition-duration) var(--offcanvas-transition-timing),
-        visibility 0s;
     }
   }
 
@@ -551,6 +559,49 @@
 
     &.fade { opacity: 0; }
     &.show { opacity: 1; }
+  }
+
+  // .navbar-toggler — BS5 standalone button component.
+  // BS6 only overrides --btn-bg/--btn-hover-bg on .navbar-toggler; it does not
+  // apply padding, border, border-radius or focus styles unless .btn is also
+  // present. BS5 HTML templates use .navbar-toggler alone, so we provide the
+  // full button appearance here.
+  .navbar-toggler {
+    padding: var(--navbar-toggler-padding-y, .25rem) var(--navbar-toggler-padding-x, .75rem);
+    font-size: var(--navbar-toggler-font-size, 1.25rem);
+    line-height: 1;
+    background-color: transparent;
+    border: var(--border-width, 1px) solid var(--navbar-toggler-border-color, transparent);
+    border-radius: var(--navbar-toggler-border-radius, .375rem);
+    transition: var(--navbar-toggler-transition, box-shadow .15s ease-in-out);
+
+    @media (prefers-reduced-motion: reduce) { transition: none; }
+
+    &:focus {
+      outline: 0;
+      box-shadow: 0 0 0 .25rem;
+    }
+  }
+
+  // .navbar-toggler-icon — BS5 hamburger icon <span> (SVG background-image).
+  // Default: dark strokes for light navbars.
+  // Override --navbar-toggler-icon-bg on .navbar-toggler for dark/primary navbars.
+  .navbar-toggler-icon {
+    // stylelint-disable function-url-quotes
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    // Default icon: dark strokes (suitable for light navbar backgrounds).
+    // Inherits --navbar-toggler-icon-bg from .navbar-toggler when set there.
+    background-image: var(
+      --navbar-toggler-icon-bg,
+      url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280%2C0%2C0%2C0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")
+    );
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    // stylelint-enable function-url-quotes
   }
 
 } // @layer components

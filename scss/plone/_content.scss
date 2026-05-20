@@ -5,57 +5,71 @@
 
 @use "bootstrap/scss/config" as *;
 @use "bootstrap/scss/layout/breakpoints" as *;
+@use "bootstrap/scss/mixins/grid" as *;
 
-// --- Column layout (driven by Diazo) ---------------------------------------
+// --- Column layout (driven by Diazo body classes) --------------------------
+// Diazo adds: col-content (always), col-one (left portlets), col-two (right portlets)
+
+// Base: gutter padding for all columns
+body.col-content {
+  #portal-column-content,
+  #portal-column-one,
+  #portal-column-two {
+    @include make-col-ready();
+  }
+}
 
 // No portlets: full width
 body.col-content:not(.col-one):not(.col-two) {
   #portal-column-content {
-    flex: 0 0 auto;
-    width: 100%;
+    @include make-col(12);
   }
 }
 
-// 1 portlet column
-body.col-content.col-one:not(.col-two),
+// Right portlet column only
 body.col-content.col-two:not(.col-one) {
   #portal-column-content {
-    width: 100%;
-
-    @include media-breakpoint-up(md) {
-      width: 100%;
-    }
-
-    @include media-breakpoint-up(lg) {
-      flex: 0 0 auto;
-      width: 75%;
-    }
+    @include media-breakpoint-up(md) { @include make-col(12); }
+    @include media-breakpoint-up(lg) { @include make-col(9); }
   }
 
-  #portal-column-one,
   #portal-column-two {
-    @include media-breakpoint-up(lg) {
-      flex: 0 0 auto;
-      width: 25%;
-    }
+    @include media-breakpoint-up(md) { @include make-col(12); }
+    @include media-breakpoint-up(lg) { @include make-col(3); }
   }
 }
 
-// 2 portlet columns
-body.col-content.col-one.col-two {
+// Left portlet column only (content rendered after, order reverses it)
+body.col-content.col-one:not(.col-two) {
   #portal-column-content {
-    @include media-breakpoint-up(lg) {
-      flex: 0 0 auto;
-      width: 50%;
-    }
+    @include media-breakpoint-up(md) { @include make-col(12); }
+    @include media-breakpoint-up(lg) { order: 2; @include make-col(9); }
   }
 
-  #portal-column-one,
+  #portal-column-one {
+    @include media-breakpoint-up(md) { @include make-col(12); }
+    @include media-breakpoint-up(lg) { order: 1; @include make-col(3); }
+  }
+}
+
+// Both portlet columns
+body.col-content.col-one.col-two {
+  #portal-column-content {
+    @include media-breakpoint-up(sm) { @include make-col(12); }
+    @include media-breakpoint-up(md) { @include make-col(12); }
+    @include media-breakpoint-up(lg) { order: 2; @include make-col(6); }
+  }
+
+  #portal-column-one {
+    @include media-breakpoint-up(sm) { @include make-col(12); }
+    @include media-breakpoint-up(md) { @include make-col(6); }
+    @include media-breakpoint-up(lg) { order: 1; @include make-col(3); }
+  }
+
   #portal-column-two {
-    @include media-breakpoint-up(lg) {
-      flex: 0 0 auto;
-      width: 25%;
-    }
+    @include media-breakpoint-up(sm) { @include make-col(12); }
+    @include media-breakpoint-up(md) { @include make-col(6); }
+    @include media-breakpoint-up(lg) { order: 3; @include make-col(3); }
   }
 }
 

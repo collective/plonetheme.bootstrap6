@@ -12,8 +12,11 @@
 :root,
 [data-bs-theme="light"] {
   // Override Bootstrap 6 primary with Plone brand color.
-  // --plone-link derives from --primary-base so both stay in sync.
+  // --primary-bg mirrors --primary-base so all BS6 components that use
+  // --primary-bg (chips, datepicker, menu active, list-group, etc.) also
+  // follow the brand color. --plone-link derives from --primary-base.
   --primary-base:     #{plone.$plone-primary};
+  --primary-bg:       var(--primary-base);
   --plone-link:       var(--primary-base);
   --plone-link-hover: #{plone.$plone-link-hover-color};
 
@@ -26,6 +29,7 @@
   @include color-mode(dark, true) {
     // Lighten primary for dark backgrounds so it stays readable.
     --primary-base:     #{plone.$plone-primary-dark};
+    --primary-bg:       var(--primary-base);
     --plone-link:       var(--primary-base);
     --plone-link-hover: #{plone.$plone-link-hover-color-dark};
 

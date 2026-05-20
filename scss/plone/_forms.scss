@@ -4,29 +4,53 @@
 // ============================================================================
 
 @use "bootstrap/scss/config" as *;
-@use "sass:color";
-
-$plone-link-color: #007bb1 !default;
 
 // --- Form layout (z-formschema) --------------------------------------------
+// .field is Plone/Barceloneta's field wrapper (plone.app.z3cform widget.pt).
+// We mirror BS6's .form-field grid layout so both classes are interchangeable.
 
-.field {
+.field,
+.form-field {
+  // BS6 .form-field grid layout
+  position: relative;
+  display: grid;
+  gap: .5rem;
   margin-bottom: 1.5rem;
 
-  label {
+  > label,
+  > .form-label {
+    justify-self: start;
+    margin-bottom: 0;
     font-weight: 600;
-    margin-bottom: .375rem;
-    display: block;
   }
 
-  .formHelp {
+  // Checkbox / radio / switch: two-column grid (BS6 .form-field behaviour)
+  &:has(> .check, > .radio, > .switch, > .form-check) {
+    grid-template-columns: auto 1fr;
+    column-gap: .5rem;
+    align-items: start;
+
+    > .check,
+    > .radio,
+    > .switch,
+    > .form-check { grid-column: 1; }
+
+    > :not(.check, .radio, .switch, .form-check) { grid-column: 2; }
+
+    > label,
+    > .form-label { grid-column: 1 / -1; }
+  }
+
+  // Help text
+  .formHelp,
+  .form-text {
     color: var(--secondary-color, #6c757d);
     font-size: .875rem;
-    margin-top: .25rem;
   }
 
   // Required field indicator
-  &.required label::after {
+  &.required > label::after,
+  &.required > .form-label::after {
     content: " ✦";
     color: var(--danger-base, #dc3545);
     font-size: .75rem;
@@ -43,7 +67,6 @@ $plone-link-color: #007bb1 !default;
     .fieldErrorBox {
       color: var(--danger-base, #dc3545);
       font-size: .875rem;
-      margin-top: .25rem;
     }
   }
 }
@@ -170,7 +193,7 @@ dl.portalMessage {
 
         &:hover {
           background: var(--bg-1, #f8f9fa);
-          border-color: var(--primary-base, #{$plone-link-color});
+          border-color: var(--primary-base, #007bb1);
         }
 
         .configlet-title {

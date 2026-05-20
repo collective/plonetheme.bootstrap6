@@ -9,22 +9,18 @@
 
 $nav-main-breakpoint: lg !default;
 
-// Plone brand color (local fallback)
-$plone-link-color: #007bb1 !default;
-
-// Navbar-specific variables (Bootstrap 6 Sass → CSS custom properties)
-$navbar-bootstrap6-bg:            var(--body-bg) !default;
-$navbar-bootstrap6-color:         var(--body-color) !default;
-$navbar-bootstrap6-hover-bg:      var(--primary-base, #{$plone-link-color}) !default;
-$navbar-bootstrap6-hover-color:   var(--white, #fff) !default;
-$navbar-bootstrap6-active-bg:     var(--primary-base, #{$plone-link-color}) !default;
-$navbar-bootstrap6-active-color:  var(--white, #fff) !default;
+// Navbar-specific variables — primary-coloured bar (like Barceloneta)
+$navbar-bootstrap6-bg:            var(--primary-base, #007bb1) !default;
+$navbar-bootstrap6-color:         #fff !default;
+$navbar-bootstrap6-hover-bg:      rgb(0 0 0 / 20%) !default;
+$navbar-bootstrap6-hover-color:   #fff !default;
+$navbar-bootstrap6-active-bg:     rgb(0 0 0 / 30%) !default;
+$navbar-bootstrap6-active-color:  #fff !default;
 
 // --- Navbar wrapper --------------------------------------------------------
 
 #mainnavigation-wrapper {
   background: $navbar-bootstrap6-bg;
-  border-bottom: 1px solid var(--border-color);
 }
 
 #mainnavigation {
@@ -38,17 +34,17 @@ $navbar-bootstrap6-active-color:  var(--white, #fff) !default;
 .navbar-bootstrap6 {
   padding-block: 0;
 
+  // BS6 .navbar reads background-color from --navbar-bg (falls back to --bg-body).
+  // Override the tokens here so the whole bar gets the primary colour.
+  --navbar-bg:            var(--primary-base, #007bb1);
+  --navbar-color:         #fff;
+  --navbar-hover-color:   #fff;
+  --navbar-active-color:  #fff;
+  // No rounded corners anywhere in the nav bar
+  --radius-5:             0;
+
   // Offcanvas panel (mobile navigation)
-  .offcanvas {
-    @include media-breakpoint-up($nav-main-breakpoint) {
-      position: static;
-      display: flex !important;
-      flex-grow: 1;
-      visibility: visible;
-      background: transparent;
-      border: none;
-    }
-  }
+  // Desktop expanded state is handled by _offcanvas.scss (.navbar-bootstrap6 .offcanvas).
 
   // Nav links
   .navbar-nav {
@@ -72,41 +68,213 @@ $navbar-bootstrap6-active-color:  var(--white, #fff) !default;
     }
   }
 
-  // Dropdown menus
-  .dropdown-menu {
-    @include media-breakpoint-up($nav-main-breakpoint) {
-      z-index: $zindex-menu;
-      min-width: 12rem;
+  // --- Dropdown (Barceloneta opener mechanism) --------------------------------
+  // Plone renders: <li class="has_subtree nav-item">
+  //                  <a class="nav-link">…</a>
+  //                  <input class="opener" type="checkbox" />
+  //                  <label>…</label>          ← toggle button
+  //                  <ul class="has_subtree dropdown">…</ul>
+  //                </li>
+  // Show/hide is CSS-only: opener:checked ~ ul (mobile) and :hover (desktop).
+
+  .navbar-nav li {
+    position: relative;
+
+    // Room for the label toggle button
+    &.has_subtree > .nav-link {
+      padding-right: 2em;
     }
 
-    // Nested dropdowns
-    .dropdown-menu {
+    // Active/current states set on the <li> by Plone
+    &.inPath > .nav-link,
+    &.current > .nav-link,
+    &.selected > .nav-link {
+      background: $navbar-bootstrap6-active-bg;
+      color: $navbar-bootstrap6-active-color;
+    }
+
+    // Hidden checkbox – never visible
+    .opener {
+      display: none;
+    }
+
+    // Label (the clickable ▼ toggle)
+    label {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 3em;
+      width: 4em;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      padding-right: .5em;
+      cursor: pointer;
+
       @include media-breakpoint-up($nav-main-breakpoint) {
-        top: 0;
-        left: 100%;
-        margin-top: -.25rem;
+        align-items: flex-start;
+        width: auto;
       }
+
+      &::after {
+        content: "▼";
+        display: inline-block;
+        line-height: 1;
+        font-size: 1.25em;
+        padding: .25em;
+        border-radius: var(--radius-5, .25rem);
+        background-color: $navbar-bootstrap6-hover-bg;
+        color: $navbar-bootstrap6-hover-color;
+        cursor: pointer;
+
+        @include media-breakpoint-up($nav-main-breakpoint) {
+          font-size: .75em;
+          background: transparent;
+          color: inherit;
+        }
+      }
+    }
+
+    // Arrow rotation animation
+    .opener + label::after {
+      transform: rotate(0deg);
+      transition: transform ease-in .35s;
+    }
+
+    .opener:checked + label::after {
+      transform: rotate(-180deg);
+      transition: transform ease-in .35s;
+
+      @include media-breakpoint-up($nav-main-breakpoint) {
+        transform: rotate(0deg);
+      }
+    }
+
+    // Subtree ul – hidden by default
+    ul {
+      list-style: none;
+      padding-left: .5em;
+      visibility: hidden;
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+
+      @include media-breakpoint-up($nav-main-breakpoint) {
+        padding-left: 0;
+        overflow: visible; // must not clip the absolutely-positioned dropdown
+        position: absolute;
+        z-index: $zindex-menu;
+        top: 100%;
+        left: 0;
+        transition: opacity ease-out .35s, visibility ease-out .35s;
+      }
+
+      // Dropdown item backgrounds – same primary colour as the navbar
+      li {
+        background-color: $navbar-bootstrap6-bg;
+
+        a {
+          color: $navbar-bootstrap6-color;
+
+          &:hover,
+          &:focus {
+            background-color: $navbar-bootstrap6-hover-bg;
+            color: $navbar-bootstrap6-hover-color;
+          }
+        }
+      }
+
+      @include media-breakpoint-up($nav-main-breakpoint) {
+        li a {
+          min-width: 16em;
+        }
+      }
+    }
+
+    // Mobile: opener checkbox shows the subtree
+    .opener ~ ul {
+      transition: height ease-out .35s, opacity ease-out .35s;
+    }
+
+    .opener:checked ~ ul {
+      height: auto;
+      transition: height ease-in .35s, opacity ease-in .35s;
+
+      @include media-breakpoint-down($nav-main-breakpoint) {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+
+  // Desktop: hover opens the subtree
+  @include media-breakpoint-up($nav-main-breakpoint) {
+    .navbar-nav li.has_subtree:hover > ul,
+    .navbar-nav li.has_subtree .has_subtree:hover > ul {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity ease-in .35s, visibility ease-in .35s;
+    }
+
+    // Nested dropdown positioning (flyout to the right)
+    .navbar-nav li.has_subtree .has_subtree ul {
+      top: 0;
+      left: 0;
+    }
+
+    .navbar-nav li.has_subtree .has_subtree:hover > ul {
+      left: 16em;
+    }
+
+    // Nested opener arrow points sideways on desktop
+    .navbar-nav li.has_subtree ul li .opener + label::after {
+      transform: rotate(-90deg);
     }
   }
 }
 
 // --- Navbar toggler --------------------------------------------------------
+// Base .navbar-toggler and .navbar-toggler-icon styles live in _bs5-compat.scss
+// Section 4. Here we only need to set the white hamburger icon for the dark
+// primary-coloured .navbar-bootstrap6 bar.
 
+// The toggler button lives inside <div class="navbar navbar-expand-lg"> inside
+// #portal-logo-wrapper. BS6 .navbar sets container-type: inline-size which
+// creates an independent formatting context and breaks the flex layout of the
+// logo wrapper (pushes the div off-screen to the right).
+// Reset it here — this div is purely a toggler wrapper, not a query container.
+#portal-logo-wrapper .navbar {
+  container-type: normal;
+}
+
+.navbar-bootstrap6 .navbar-toggler {
+  // White-stroke hamburger for dark/primary navbar background.
+  // stylelint-disable function-url-quotes
+  --navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255%2C255%2C255%2C0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  // stylelint-enable function-url-quotes
+}
+
+// Hide toggler on expanded breakpoint (BS6 handles this via container queries
+// for .lg\:navbar-expand etc.; this covers the BS5 .navbar-expand-* classes).
 .navbar-toggler {
   @include media-breakpoint-up($nav-main-breakpoint) {
     display: none;
   }
 }
 
-// --- Offcanvas (mobile) ----------------------------------------------------
+// --- Offcanvas theming (primary-colour header, width cap) ------------------
+// Base offcanvas CSS (BS5 backport) lives in _bs5-compat.scss Section 4.
 
-.offcanvas {
+.navbar-bootstrap6 .offcanvas {
   @include media-breakpoint-down($nav-main-breakpoint) {
     max-width: 80vw;
   }
 
-  .offcanvas-header {
-    background: var(--primary-base, #{$plone-link-color});
+  .offcanvas-header,
+  .offcanvas-body {
+    background: var(--primary-base, #007bb1);
   }
 }
 

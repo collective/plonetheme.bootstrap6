@@ -14,77 +14,29 @@ $footer-color: #dee2e6 !default;  // gray-300 equivalent
 #portal-footer-wrapper {
   background: $footer-bg;
   color: $footer-color;
-  padding-top: 2rem;
-
-  a {
-    color: color.adjust($footer-color, $lightness: 10%);
-    text-decoration: none;
-
-    &:hover {
-      color: #fff;
-      text-decoration: underline;
-    }
-  }
-}
-
-// --- Doormat (footer portlets) ---------------------------------------------
-
-#portal-footer .doormat {
-  padding-bottom: 2rem;
-  border-bottom: 1px solid rgb(255 255 255 / 15%);
-  margin-bottom: 1.5rem;
-
-  .headline {
-    h2 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: .75rem;
-    }
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      margin-bottom: .375rem;
-    }
-  }
+  padding: 1rem;
+  text-align: center;
 }
 
 // --- Copyright / colophon --------------------------------------------------
 
-#portal-footer .copyright,
-#portal-footer .colophon {
-  font-size: .875rem;
-  color: rgb(255 255 255 / 60%);
-  padding-block: .5rem;
+#portal-footer-wrapper .copyright,
+#portal-footer-wrapper .colophon {
+  padding: .5rem;
 }
 
 // --- Site actions ----------------------------------------------------------
 
-#portal-footer .site-actions {
-  padding-block: 1rem;
-  border-top: 1px solid rgb(255 255 255 / 15%);
+#portal-footer-wrapper .site-actions {
+  padding: .5rem;
 
-  ul,
-  div {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    list-style: none;
+  ul {
     padding: 0;
     margin: 0;
-  }
 
-  a {
-    font-size: .875rem;
-    color: rgb(255 255 255 / 60%);
-
-    &:hover {
-      color: #fff;
+    li {
+      display: inline;
+      margin: 0 .5rem;
     }
   }
 }
