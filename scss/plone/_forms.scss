@@ -1,0 +1,187 @@
+// ============================================================================
+// plonetheme.bootstrap6 — Forms
+// Compatible with Plone Classic UI forms (#content-core form, .pat-autotoc)
+// ============================================================================
+
+@use "bootstrap/scss/config" as *;
+@use "sass:color";
+
+$plone-link-color: #007bb1 !default;
+
+// --- Form layout (z-formschema) --------------------------------------------
+
+.field {
+  margin-bottom: 1.5rem;
+
+  label {
+    font-weight: 600;
+    margin-bottom: .375rem;
+    display: block;
+  }
+
+  .formHelp {
+    color: var(--secondary-color, #6c757d);
+    font-size: .875rem;
+    margin-top: .25rem;
+  }
+
+  // Required field indicator
+  &.required label::after {
+    content: " ✦";
+    color: var(--danger-base, #dc3545);
+    font-size: .75rem;
+  }
+
+  // Validation states
+  &.error {
+    input,
+    select,
+    textarea {
+      border-color: var(--danger-base, #dc3545);
+    }
+
+    .fieldErrorBox {
+      color: var(--danger-base, #dc3545);
+      font-size: .875rem;
+      margin-top: .25rem;
+    }
+  }
+}
+
+// --- Plone form wrapper ----------------------------------------------------
+
+form#edit-bar,
+form.rowlike {
+  // toolbar forms — no extra styles
+}
+
+// --- Login form ------------------------------------------------------------
+
+.template-login_form,
+.template-registered {
+  #content {
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+}
+
+// --- Search form -----------------------------------------------------------
+
+#searchform {
+  .searchPage {
+    label {
+      font-weight: 600;
+    }
+
+    select {
+      width: auto;
+    }
+  }
+}
+
+// --- Widget types ----------------------------------------------------------
+
+// Checkbox / radio lists
+.checkboxWidget,
+.radioWidget {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: .375rem;
+  }
+}
+
+// Date/time widget
+.datetimewidget-field {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+}
+
+// File upload
+.field.NamedFile {
+  .input-group {
+    flex-wrap: nowrap;
+  }
+}
+
+// --- Form actions (buttons) ------------------------------------------------
+
+.formControls,
+.actionButtons {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+// --- Status-Meldungen -------------------------------------------------------
+
+.portalMessage,
+dl.portalMessage {
+  &.error {
+    --alert-color: var(--danger-fg, #842029);
+    --alert-bg: var(--danger-subtle, #f8d7da);
+    --alert-border: var(--danger-base, #dc3545);
+  }
+
+  &.warning {
+    --alert-color: var(--warning-fg, #664d03);
+    --alert-bg: var(--warning-subtle, #fff3cd);
+    --alert-border: var(--warning-base, #ffc107);
+  }
+
+  &.info {
+    --alert-color: var(--info-fg, #055160);
+    --alert-bg: var(--info-subtle, #cff4fc);
+    --alert-border: var(--info-base, #0dcaf0);
+  }
+}
+
+// --- Control Panel ----------------------------------------------------------
+
+.section-plone-controlpanel {
+  #content-core {
+    .configlets {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+
+      li a {
+        display: flex;
+        flex-direction: column;
+        gap: .25rem;
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: .5rem;
+        text-decoration: none;
+        color: var(--body-color);
+
+        &:hover {
+          background: var(--bg-1, #f8f9fa);
+          border-color: var(--primary-base, #{$plone-link-color});
+        }
+
+        .configlet-title {
+          font-weight: 600;
+        }
+
+        .configlet-description {
+          font-size: .875rem;
+          color: var(--secondary-color, #6c757d);
+        }
+      }
+    }
+  }
+}

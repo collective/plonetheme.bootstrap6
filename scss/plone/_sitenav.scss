@@ -1,0 +1,120 @@
+// ============================================================================
+// plonetheme.bootstrap6 — Site navigation (navbar)
+// Compatible with #portal-globalnav-wrapper, .navbar-bootstrap6
+// ============================================================================
+
+@use "bootstrap/scss/config" as *;
+@use "bootstrap/scss/layout/breakpoints" as *;
+@use "sass:color";
+
+$nav-main-breakpoint: lg !default;
+
+// Plone brand color (local fallback)
+$plone-link-color: #007bb1 !default;
+
+// Navbar-specific variables (Bootstrap 6 Sass → CSS custom properties)
+$navbar-bootstrap6-bg:            var(--body-bg) !default;
+$navbar-bootstrap6-color:         var(--body-color) !default;
+$navbar-bootstrap6-hover-bg:      var(--primary-base, #{$plone-link-color}) !default;
+$navbar-bootstrap6-hover-color:   var(--white, #fff) !default;
+$navbar-bootstrap6-active-bg:     var(--primary-base, #{$plone-link-color}) !default;
+$navbar-bootstrap6-active-color:  var(--white, #fff) !default;
+
+// --- Navbar wrapper --------------------------------------------------------
+
+#mainnavigation-wrapper {
+  background: $navbar-bootstrap6-bg;
+  border-bottom: 1px solid var(--border-color);
+}
+
+#mainnavigation {
+  > .container {
+    padding-inline: 0;
+  }
+}
+
+// --- Main navigation -------------------------------------------------------
+
+.navbar-bootstrap6 {
+  padding-block: 0;
+
+  // Offcanvas panel (mobile navigation)
+  .offcanvas {
+    @include media-breakpoint-up($nav-main-breakpoint) {
+      position: static;
+      display: flex !important;
+      flex-grow: 1;
+      visibility: visible;
+      background: transparent;
+      border: none;
+    }
+  }
+
+  // Nav links
+  .navbar-nav {
+    .nav-link {
+      padding: .75rem 1rem;
+      color: $navbar-bootstrap6-color;
+      font-weight: 500;
+      white-space: nowrap;
+
+      &:hover,
+      &:focus {
+        background: $navbar-bootstrap6-hover-bg;
+        color: $navbar-bootstrap6-hover-color;
+      }
+
+      &.active,
+      &[aria-current] {
+        background: $navbar-bootstrap6-active-bg;
+        color: $navbar-bootstrap6-active-color;
+      }
+    }
+  }
+
+  // Dropdown menus
+  .dropdown-menu {
+    @include media-breakpoint-up($nav-main-breakpoint) {
+      z-index: $zindex-menu;
+      min-width: 12rem;
+    }
+
+    // Nested dropdowns
+    .dropdown-menu {
+      @include media-breakpoint-up($nav-main-breakpoint) {
+        top: 0;
+        left: 100%;
+        margin-top: -.25rem;
+      }
+    }
+  }
+}
+
+// --- Navbar toggler --------------------------------------------------------
+
+.navbar-toggler {
+  @include media-breakpoint-up($nav-main-breakpoint) {
+    display: none;
+  }
+}
+
+// --- Offcanvas (mobile) ----------------------------------------------------
+
+.offcanvas {
+  @include media-breakpoint-down($nav-main-breakpoint) {
+    max-width: 80vw;
+  }
+
+  .offcanvas-header {
+    background: var(--primary-base, #{$plone-link-color});
+  }
+}
+
+// --- Search input inside mobile nav ----------------------------------------
+
+#portal-searchbox {
+  .searchField {
+    border-radius: .375rem;
+    padding: .375rem .75rem;
+  }
+}

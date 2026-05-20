@@ -1,0 +1,79 @@
+// ============================================================================
+// plonetheme.bootstrap6 — Header & search box
+// Compatible with Plone Classic UI selectors (#content-header, #portal-logo, etc.)
+// ============================================================================
+
+@use "bootstrap/scss/config" as *;
+@use "bootstrap/scss/layout/breakpoints" as *;
+@use "sass:color";
+
+// --- Header wrapper --------------------------------------------------------
+
+#content-header {
+  background: var(--bg-body);
+  border-bottom: 1px solid var(--border-color);
+}
+
+// --- Logo ------------------------------------------------------------------
+
+#portal-logo {
+  a {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  img {
+    max-height: 4rem;
+    width: auto;
+  }
+}
+
+// --- Search box (livesearch) -----------------------------------------------
+
+#portal-searchbox {
+  position: relative;
+  flex-shrink: 0;
+
+  form {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .searchButton {
+    display: none;  // icon button is sufficient
+  }
+}
+
+.livesearch-results {
+  margin-top: 1rem;
+  width: 100%;
+
+  @include media-breakpoint-up(lg) {
+    position: absolute;
+    z-index: #{$zindex-drawer + 1};
+    margin-top: 3rem;
+    right: 0;
+    width: 28rem;
+
+    @if $enable-shadows {
+      box-shadow: 0 .5rem 1rem rgb(0 0 0 / 15%);
+    }
+  }
+
+  .heading {
+    font-size: 1.25rem;
+  }
+
+  .col.img {
+    flex: 0 0 auto;
+    max-width: 50%;
+    width: auto;
+  }
+}
+
+.pat-livesearch.show_images + .livesearch-results {
+  @include media-breakpoint-up(lg) {
+    width: 34rem;
+  }
+}

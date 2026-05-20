@@ -1,0 +1,34 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="plone"
+    >
+
+  <include package="plone.resource" />
+  <include package="plone.app.theming" />
+
+  <!-- Diazo theme -->
+  <plone:static
+      directory="theme"
+      name="bootstrap6"
+      type="theme"
+      />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="Bootstrap 6 Theme"
+      description="Bootstrap 6 is a Plone 6 theme based on Bootstrap 6 and Barceloneta."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/default"
+      />
+
+<genericsetup:registerProfile
+    name="uninstall"
+    title="Uninstall Bootstrap 6 Theme"
+    description="Uninstall Bootstrap 6 Theme"
+    provides="Products.GenericSetup.interfaces.EXTENSION"
+    directory="profiles/uninstall"
+    />
+
+</configure>

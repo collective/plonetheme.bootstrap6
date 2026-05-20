@@ -1,0 +1,272 @@
+// ============================================================================
+// plonetheme.bootstrap6 — Bootstrap 5 compatibility shim
+//
+// Adds CSS class aliases for Bootstrap 5 component names and patterns that
+// changed in Bootstrap 6. Plone Classic UI templates that still use the old
+// class names will continue to render correctly without template changes.
+//
+// REMOVAL: This file can be dropped once all upstream Plone templates have
+// been updated to Bootstrap 6 class names. Removing the @use line in
+// bootstrap6.scss is sufficient — no other files need changes.
+//
+// ── What changed in Bootstrap 6 ──────────────────────────────────────────────
+//
+//   Component     BS5 class(es)                 BS6 class(es)
+//   ─────────────────────────────────────────────────────────────────────────
+//   Dropdown      .dropdown-menu                .menu
+//                 .dropdown-item                .menu-item
+//                 .dropdown-header              .menu-header
+//                 .dropdown-divider             .menu-divider
+//                 .dropdown-toggle              (JS-controlled; caret below)
+//
+//   Buttons       .btn-primary / .btn-success … .btn-solid  + --theme-* vars
+//                 .btn-outline-primary …        .btn-outline + --theme-* vars
+//
+// ── What is unchanged (no compat needed) ─────────────────────────────────────
+//   .nav-tabs, .nav-pills, .nav-underline       still exist in BS6
+//   .btn (base class)                           still exists
+//   .btn-link, .btn-sm, .btn-lg                 still exist
+//   data-bs-toggle / data-bs-dismiss            attribute names unchanged
+//
+// ── JavaScript note ──────────────────────────────────────────────────────────
+//   BS5 dropdowns used data-bs-toggle="dropdown"; BS6 uses data-bs-toggle="menu".
+//   This file fixes the CSS side only. If Bootstrap 6 JS does not fall back
+//   to the old toggle value, templates must also be updated.
+// ============================================================================
+
+@use "bootstrap/scss/config" as *;
+@use "bootstrap/scss/layout/breakpoints" as *;
+
+
+// ============================================================================
+// 1. Dropdown → Menu
+// ============================================================================
+
+@layer components {
+
+  // Positioning wrapper (structure unchanged from BS5)
+  .dropdown {
+    position: relative;
+  }
+
+  // Toggle trigger: add a downward caret (was provided by BS5 automatically)
+  .dropdown-toggle {
+    &::after {
+      display: inline-block;
+      margin-inline-start: .3em;
+      vertical-align: .255em;
+      content: "";
+      border-top: .3em solid;
+      border-inline-end: .3em solid transparent;
+      border-bottom: 0;
+      border-inline-start: .3em solid transparent;
+    }
+
+    &:empty::after {
+      margin-inline-start: 0;
+    }
+  }
+
+  // Menu container (BS5: .dropdown-menu → BS6: .menu)
+  .dropdown-menu {
+    position: absolute;
+    z-index: #{$zindex-menu};
+    display: none;
+    min-width: 10rem;
+    padding: .25rem;
+    margin: 0;
+    color: var(--fg-body);
+    font-size: var(--font-size-sm, .875rem);
+    background-color: var(--bg-body);
+    background-clip: padding-box;
+    border-radius: var(--radius-7, .5rem);
+    box-shadow: var(--box-shadow);
+
+    &.show {
+      display: block;
+    }
+
+    // Right-aligned menu (BS5: .dropdown-menu-end)
+    &.dropdown-menu-end {
+      inset-inline-end: 0;
+      inset-inline-start: auto;
+    }
+  }
+
+  // Responsive right-aligned variant
+  @include media-breakpoint-up(md) {
+    .dropdown-menu-md-end {
+      inset-inline-end: 0;
+      inset-inline-start: auto;
+    }
+  }
+
+  // Menu item (BS5: .dropdown-item → BS6: .menu-item)
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    width: 100%;
+    padding: .25rem .75rem;
+    color: var(--fg-body);
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    border-radius: var(--radius-5, .375rem);
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      background-color: var(--bg-1);
+      color: var(--fg-body);
+      outline: 0;
+    }
+
+    &.active,
+    &:active {
+      background-color: var(--primary-bg);
+      color: var(--primary-contrast);
+    }
+
+    &.disabled,
+    &:disabled {
+      color: var(--fg-3);
+      pointer-events: none;
+      background-color: transparent;
+    }
+  }
+
+  // Section header (BS5: .dropdown-header → BS6: .menu-header)
+  .dropdown-header {
+    display: block;
+    padding: .25rem .75rem;
+    color: var(--fg-3);
+    font-size: var(--font-size-xs, .75rem);
+    white-space: nowrap;
+  }
+
+  // Divider (BS5: .dropdown-divider → BS6: .menu-divider)
+  .dropdown-divider {
+    height: 0;
+    margin: .125rem .25rem;
+    overflow: hidden;
+    border-top: 1px solid var(--border-color-translucent);
+    opacity: 1;
+  }
+
+} // @layer components
+
+
+// ============================================================================
+// 2. Button color variants
+//
+// BS6 no longer has .btn-primary, .btn-secondary, .btn-success, etc.
+// Instead, BS6 uses functional style modifiers (.btn-solid, .btn-outline)
+// whose colors are controlled by --theme-* CSS variables.
+//
+// This shim re-introduces the old class names by setting the --btn-* CSS
+// variables that the base .btn rule reads for background, color and hover
+// states. The base .btn class (still present in BS6) provides all structural
+// styles; these classes only supply the color tokens.
+// ============================================================================
+
+@layer components {
+
+  // --- Solid color variants (.btn-{color}) -----------------------------------
+  // Covers: primary, secondary, success, danger, warning, info
+
+  @each $name in primary, secondary, success, danger, warning, info {
+    .btn-#{$name} {
+      --btn-bg: var(--#{$name}-bg);
+      --btn-color: var(--#{$name}-contrast);
+      --btn-border-color: var(--#{$name}-bg);
+      --btn-hover-bg: oklch(from var(--#{$name}-bg) calc(l * .95) calc(c * 1.1) h);
+      --btn-hover-border-color: oklch(from var(--#{$name}-bg) calc(l * .95) calc(c * 1.1) h);
+      --btn-hover-color: var(--#{$name}-contrast);
+      --btn-active-bg: oklch(from var(--#{$name}-bg) calc(l * .9) calc(c * 1.15) h);
+      --btn-active-border-color: oklch(from var(--#{$name}-bg) calc(l * .9) calc(c * 1.15) h);
+      --btn-active-color: var(--#{$name}-contrast);
+      background-color: var(--btn-bg);
+      color: var(--btn-color);
+      border-color: var(--btn-border-color);
+    }
+  }
+
+  // Light / dark: not part of the semantic color loop above
+  .btn-light {
+    --btn-bg: var(--bg-2);
+    --btn-color: var(--fg-body);
+    --btn-border-color: var(--border-color);
+    --btn-hover-bg: var(--bg-3);
+    --btn-hover-color: var(--fg-body);
+    --btn-hover-border-color: var(--border-color);
+    --btn-active-bg: var(--bg-3);
+    --btn-active-color: var(--fg-body);
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    border-color: var(--btn-border-color);
+  }
+
+  .btn-dark {
+    --btn-bg: var(--inverse-bg, #212529);
+    --btn-color: var(--inverse-contrast, #fff);
+    --btn-border-color: var(--inverse-bg, #212529);
+    --btn-hover-bg: oklch(from var(--inverse-bg, #212529) calc(l * .95) calc(c * 1.1) h);
+    --btn-hover-color: var(--inverse-contrast, #fff);
+    --btn-active-bg: oklch(from var(--inverse-bg, #212529) calc(l * .9) calc(c * 1.15) h);
+    --btn-active-color: var(--inverse-contrast, #fff);
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    border-color: var(--btn-border-color);
+  }
+
+  // --- Outline color variants (.btn-outline-{color}) -------------------------
+
+  @each $name in primary, secondary, success, danger, warning, info {
+    .btn-outline-#{$name} {
+      --btn-bg: transparent;
+      --btn-color: var(--#{$name}-bg);
+      --btn-border-color: var(--#{$name}-bg);
+      --btn-hover-bg: var(--#{$name}-bg);
+      --btn-hover-color: var(--#{$name}-contrast);
+      --btn-hover-border-color: var(--#{$name}-bg);
+      --btn-active-bg: var(--#{$name}-bg);
+      --btn-active-color: var(--#{$name}-contrast);
+      --btn-active-border-color: var(--#{$name}-bg);
+      background-color: var(--btn-bg);
+      color: var(--btn-color);
+      border-color: var(--btn-border-color);
+    }
+  }
+
+  .btn-outline-light {
+    --btn-bg: transparent;
+    --btn-color: var(--fg-body);
+    --btn-border-color: var(--border-color);
+    --btn-hover-bg: var(--bg-2);
+    --btn-hover-color: var(--fg-body);
+    --btn-hover-border-color: var(--border-color);
+    --btn-active-bg: var(--bg-2);
+    --btn-active-color: var(--fg-body);
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    border-color: var(--btn-border-color);
+  }
+
+  .btn-outline-dark {
+    --btn-bg: transparent;
+    --btn-color: var(--inverse-bg, #212529);
+    --btn-border-color: var(--inverse-bg, #212529);
+    --btn-hover-bg: var(--inverse-bg, #212529);
+    --btn-hover-color: var(--inverse-contrast, #fff);
+    --btn-hover-border-color: var(--inverse-bg, #212529);
+    --btn-active-bg: var(--inverse-bg, #212529);
+    --btn-active-color: var(--inverse-contrast, #fff);
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    border-color: var(--btn-border-color);
+  }
+
+} // @layer components

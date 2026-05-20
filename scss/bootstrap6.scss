@@ -1,0 +1,38 @@
+// ============================================================================
+// plonetheme.bootstrap6 — Main entry point
+//
+// Bootstrap 6 is configured via @use. The with() parameters override
+// Bootstrap _config.scss variables once for the entire compilation;
+// all subsequent @use "bootstrap/scss/..." calls receive this configuration.
+//
+// Difference from barceloneta:
+//   barceloneta (Bootstrap 5):  $variable !default; @import "bootstrap"
+//   bootstrap6 (Bootstrap 6): @use "bootstrap/scss/config" with ($variable: value)
+// ============================================================================
+
+// 1. Configure and fully load Bootstrap 6.
+//    _bs-forward.scss sets config variables then forwards all Bootstrap styles.
+@use "bs-forward";
+
+// 2. Roboto webfont (@font-face declarations, self-hosted from theme/roboto/).
+@use "roboto";
+
+// 3. Bootstrap 5 compatibility shim (class aliases for renamed components).
+//    Remove this line once Plone templates are updated to Bootstrap 6 classes.
+@use "bs5-compat";
+
+// 4. Plone CSS custom properties (root tokens).
+//    Outputs --plone-* variables on :root.
+@use "plone-root";
+
+// 5. Plone-specific component styles.
+//    Each file uses @use "bootstrap/scss/..." for the Sass APIs it needs.
+@use "plone/scaffolding";
+@use "plone/header";
+@use "plone/sitenav";
+@use "plone/toolbar";
+@use "plone/breadcrumbs";
+@use "plone/content";
+@use "plone/portlets";
+@use "plone/forms";
+@use "plone/footer";

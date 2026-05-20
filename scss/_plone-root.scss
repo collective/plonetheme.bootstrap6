@@ -1,0 +1,34 @@
+// ============================================================================
+// plonetheme.bootstrap6 — Plone CSS custom properties (:root)
+//
+// Emits Plone-specific colors and tokens as CSS custom properties.
+// Bootstrap 6 no longer uses a prefix (no --bs-, just --variable-name).
+// ============================================================================
+
+@use "plone-colors" as plone;
+@use "bootstrap/scss/config" as *;
+@use "bootstrap/scss/mixins/color-mode" as *;
+
+:root,
+[data-bs-theme="light"] {
+  // Plone color tokens
+  @each $name, $value in plone.$plone-colors {
+    --plone-#{$name}: #{$value};
+  }
+
+  @each $name, $value in plone.$state-colors {
+    --plone-state-#{$name}: #{$value};
+  }
+}
+
+@if $enable-dark-mode {
+  @include color-mode(dark, true) {
+    @each $name, $value in plone.$plone-colors-dark {
+      --plone-#{$name}: #{$value};
+    }
+
+    @each $name, $value in plone.$state-colors-dark {
+      --plone-state-#{$name}: #{$value};
+    }
+  }
+}

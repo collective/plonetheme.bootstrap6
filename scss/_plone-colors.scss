@@ -1,0 +1,54 @@
+// ============================================================================
+// plonetheme.bootstrap6 — Plone Farben
+//
+// Definiert Plone-spezifische Farben als CSS Custom Properties und Sass-
+// Variablen. Wird in bootstrap6.scss über @use eingebunden.
+//
+// Verwendet Bootstrap 6 native @use Syntax — kein @import.
+// ============================================================================
+
+@use "sass:color";
+
+// Plone brand colors
+$plone-link-color:       #007bb1 !default;
+$plone-link-hover-color: color.adjust($plone-link-color, $lightness: -15%) !default;
+
+// Gray palette (mirrors Bootstrap 5 names for backward compatibility)
+$white:    #fff !default;
+$black:    #000 !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+
+// State / feedback colors
+$plone-color-warning: #f0ad4e !default;
+$plone-color-error:   #d9534f !default;
+$plone-color-info:    #5bc0de !default;
+$plone-color-success: #5cb85c !default;
+
+// Color maps for CSS custom property output
+$plone-colors: (
+  "link":       $plone-link-color,
+  "link-hover": $plone-link-hover-color,
+) !default;
+
+$plone-colors-dark: (
+  "link":       color.adjust($plone-link-color, $lightness: 20%),
+  "link-hover": color.adjust($plone-link-color, $lightness: 10%),
+) !default;
+
+// State colors (form validation, alerts, etc.)
+$state-colors: (
+  "warning": $plone-color-warning,
+  "error":   $plone-color-error,
+  "info":    $plone-color-info,
+  "success": $plone-color-success,
+) !default;
+
+$state-colors-dark: $state-colors !default;

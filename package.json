@@ -1,0 +1,41 @@
+{
+  "name": "@plone/plonetheme-bootstrap6",
+  "description": "Plone Classic UI Theme based on Bootstrap 6",
+  "version": "1.0.0-dev",
+  "files": [
+    "/scss",
+    "/src/plonetheme/bootstrap6/theme/css"
+  ],
+  "license": "GPL-2.0",
+  "keywords": [
+    "plone",
+    "classic-ui",
+    "front-end",
+    "sass",
+    "bootstrap6",
+    "css"
+  ],
+  "devDependencies": {
+    "autoprefixer": "^10.5.0",
+    "nodemon": "^3.1.14",
+    "npm-run-all2": "^9.0.0",
+    "postcss": "^8.5.15",
+    "postcss-cli": "^11.0.1",
+    "sass": "1.99.0",
+    "stylelint": "^17.11.1",
+    "stylelint-config-twbs-bootstrap": "^16.1.0"
+  },
+  "scripts": {
+    "watch": "nodemon --watch scss/ --ext scss --exec \"pnpm run css-main\"",
+    "build": "npm-run-all css-compile-main css-prefix-main css-minify-main",
+    "css-main": "npm-run-all css-compile-main css-prefix-main css-minify-main",
+    "css-compile-main": "sass --load-path=node_modules --style expanded --source-map --embed-sources --no-error-css scss/bootstrap6.scss:src/plonetheme/bootstrap6/theme/css/bootstrap6.css",
+    "css-prefix-main": "postcss --config postcss.config.js --replace \"src/plonetheme/bootstrap6/theme/css/*.css\" \"!src/plonetheme/bootstrap6/theme/css/*.min.css\"",
+    "css-minify-main": "sass --load-path=node_modules --style compressed --source-map --embed-sources --no-error-css scss/bootstrap6.scss:src/plonetheme/bootstrap6/theme/css/bootstrap6.min.css",
+    "css-lint": "stylelint \"scss/**/*.scss\" --cache --cache-location .cache/.stylelintcache"
+  },
+  "dependencies": {
+    "bootstrap": "twbs/bootstrap#v6-dev"
+  },
+  "packageManager": "pnpm@10.32.1"
+}

@@ -1,0 +1,43 @@
+// ============================================================================
+// plonetheme.bootstrap6 — Breadcrumbs (#above-content, #viewlet-above-content)
+// ============================================================================
+
+@use "bootstrap/scss/config" as *;
+
+$breadcrumb-bg:           var(--bg-2, #e9ecef) !default;
+$breadcrumb-padding-y:    .5rem !default;
+$breadcrumb-padding-x:    1rem !default;
+$breadcrumb-margin-bottom: 2rem !default;
+
+#above-content-wrapper {
+  background: $breadcrumb-bg;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: $breadcrumb-margin-bottom;
+}
+
+#above-content {
+  // Diazo inserts Plone content here (breadcrumbs, above-content viewlets)
+}
+
+.breadcrumb-wrapper,
+#viewlet-above-content {
+  padding-block: $breadcrumb-padding-y;
+  padding-inline: $breadcrumb-padding-x;
+
+  .breadcrumb {
+    background: transparent;
+    margin-bottom: 0;
+    padding: 0;
+    font-size: .875rem;
+  }
+
+  .breadcrumb-item {
+    + .breadcrumb-item::before {
+      color: var(--secondary-color, #6c757d);
+    }
+
+    &.active {
+      color: var(--body-color);
+    }
+  }
+}

@@ -1,0 +1,128 @@
+// ============================================================================
+// plonetheme.bootstrap6 — Content area
+// Compatible with #portal-column-content, .documentContent, etc.
+// ============================================================================
+
+@use "bootstrap/scss/config" as *;
+@use "bootstrap/scss/layout/breakpoints" as *;
+
+// --- Column layout (driven by Diazo) ---------------------------------------
+
+// No portlets: full width
+body.col-content:not(.col-one):not(.col-two) {
+  #portal-column-content {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+}
+
+// 1 portlet column
+body.col-content.col-one:not(.col-two),
+body.col-content.col-two:not(.col-one) {
+  #portal-column-content {
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+      width: 100%;
+    }
+
+    @include media-breakpoint-up(lg) {
+      flex: 0 0 auto;
+      width: 75%;
+    }
+  }
+
+  #portal-column-one,
+  #portal-column-two {
+    @include media-breakpoint-up(lg) {
+      flex: 0 0 auto;
+      width: 25%;
+    }
+  }
+}
+
+// 2 portlet columns
+body.col-content.col-one.col-two {
+  #portal-column-content {
+    @include media-breakpoint-up(lg) {
+      flex: 0 0 auto;
+      width: 50%;
+    }
+  }
+
+  #portal-column-one,
+  #portal-column-two {
+    @include media-breakpoint-up(lg) {
+      flex: 0 0 auto;
+      width: 25%;
+    }
+  }
+}
+
+// --- Document content ------------------------------------------------------
+
+#content {
+  padding-block: 1rem 2rem;
+
+  // Plone document byline
+  .documentByLine {
+    color: var(--secondary-color, #6c757d);
+    font-size: .875rem;
+    margin-bottom: 1rem;
+  }
+
+  // Inline images in rich-text content
+  .image-inline,
+  .captioned {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+// --- Related items ---------------------------------------------------------
+
+#section-related {
+  margin-top: 3rem;
+
+  .section-heading {
+    font-size: 1.25rem;
+    margin-bottom: .5rem;
+    font-weight: $headings-font-weight;
+    line-height: 1.2;
+  }
+
+  .media {
+    margin-bottom: 1rem;
+  }
+}
+
+// --- Categories / tags -----------------------------------------------------
+
+#section-category {
+  margin-bottom: 2rem;
+}
+
+.meta-icon {
+  font-size: 1.5em;
+  line-height: 1;
+}
+
+// --- Content tables --------------------------------------------------------
+
+table.listing,
+table.plain {
+  width: 100%;
+
+  thead th {
+    background: var(--bg-2, #e9ecef);
+    border-bottom: 2px solid var(--border-color);
+  }
+
+  tbody tr:hover {
+    background: var(--bg-1, #f8f9fa);
+  }
+
+  &.odd tr:nth-child(odd) {
+    background: var(--bg-1, #f8f9fa);
+  }
+}

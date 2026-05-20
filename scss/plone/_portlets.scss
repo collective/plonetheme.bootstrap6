@@ -1,0 +1,141 @@
+// ============================================================================
+// plonetheme.bootstrap6 — Portlets
+// Compatible with #portal-column-one, #portal-column-two, .portletWrapper
+// ============================================================================
+
+@use "bootstrap/scss/config" as *;
+
+$portlet-border-color: var(--border-color) !default;
+
+// --- Portlet container -----------------------------------------------------
+
+.portletWrapper {
+  margin-bottom: $spacer;
+
+  @if $enable-shadows {
+    box-shadow: 0 .5rem 1rem rgb(0 0 0 / 15%);
+  }
+}
+
+// --- Portlet card (Bootstrap 6 .card structure) ----------------------------
+
+.portlet {
+  // Portlet header
+  .portletHeader {
+    font-size: .875rem;
+    font-weight: 600;
+    padding: .5rem 1rem;
+    background: var(--bg-2, #e9ecef);
+    border-bottom: 1px solid $portlet-border-color;
+  }
+
+  // Portlet body
+  .portletContent {
+    padding: 0;
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        border-top: 1px solid $portlet-border-color;
+        padding: .5rem 1rem;
+
+        &:first-child {
+          border-top: none;
+        }
+      }
+
+      a {
+        color: var(--plone-link, var(--link-color));
+        text-decoration: none;
+
+        &:hover {
+          color: var(--plone-link-hover, var(--link-hover-color));
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  // Portlet footer
+  .portletFooter {
+    padding: .5rem 1rem;
+    font-size: .875rem;
+    border-top: 1px solid $portlet-border-color;
+    background: var(--bg-1, #f8f9fa);
+  }
+
+  // Navigation portlet
+  &.portletNavigationTree {
+    .portletItem {
+      position: relative;
+
+      &.navTreeCurrentNode > a {
+        font-weight: 600;
+        color: var(--primary-base, #007bb1);
+      }
+
+      &.navTreeFolderish > a::after {
+        content: "";
+        display: inline-block;
+        width: .5rem;
+        height: .5rem;
+        border-right: 2px solid currentcolor;
+        border-bottom: 2px solid currentcolor;
+        transform: rotate(-45deg);
+        margin-left: .375rem;
+        vertical-align: middle;
+      }
+    }
+
+    // Verschachtelte Ebenen
+    ul {
+      padding-left: 1rem;
+    }
+  }
+}
+
+// --- Kalender-Portlet -------------------------------------------------------
+
+.portletCalendar {
+  table {
+    width: 100%;
+    font-size: .875rem;
+
+    th,
+    td {
+      text-align: center;
+      padding: .25rem;
+    }
+
+    .weekdays th {
+      background: var(--bg-2, #e9ecef);
+      font-weight: 600;
+    }
+
+    .event a {
+      display: block;
+      background: var(--primary-subtle, #cfe2ff);
+      border-radius: .25rem;
+    }
+
+    .today td {
+      font-weight: 700;
+      color: var(--primary-base, #007bb1);
+    }
+  }
+}
+
+// --- News-Portlet -----------------------------------------------------------
+
+.portletNews {
+  .portletItem {
+    .portletItemDetails {
+      color: var(--secondary-color, #6c757d);
+      font-size: .8125rem;
+      display: block;
+    }
+  }
+}

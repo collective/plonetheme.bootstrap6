@@ -1,0 +1,40 @@
+// ============================================================================
+// plonetheme.bootstrap6 — Bootstrap 6 configuration
+//
+// Bootstrap 6 variables can ONLY be configured via
+//   @use "bootstrap/scss/config" with (...)
+// NOT via the main bootstrap module.
+//
+// Important: This file MUST be the very first @use in bootstrap6.scss so
+// that the configuration takes effect before all other Bootstrap @use calls.
+//
+// The @forward below then emits all Bootstrap 6 styles with the
+// configured values applied automatically.
+// ============================================================================
+
+// Step 1: Override Bootstrap 6 config variables.
+// Every subsequent @use "bootstrap/scss/..." in this compilation automatically
+// sees these values (Sass loads each module only once).
+@use "bootstrap/scss/config" with (
+
+  // ---- Feature flags -------------------------------------------------------
+  $enable-caret:              true,
+  $enable-rounded:            true,
+  $enable-shadows:            false,
+  $enable-gradients:          false,
+  $enable-transitions:        true,
+  $enable-reduced-motion:     true,
+  $enable-smooth-scroll:      false,
+  $enable-grid-classes:       true,
+  $enable-container-classes:  true,
+  $enable-cssgrid:            true,
+  $enable-button-pointers:    true,
+  $enable-dark-mode:          true,
+
+  // ---- Typography ----------------------------------------------------------
+  $line-height-base: 1.5,
+);
+
+// Step 2: Emit all Bootstrap 6 styles.
+// Uses the values configured in step 1 automatically.
+@forward "bootstrap/scss/bootstrap";
