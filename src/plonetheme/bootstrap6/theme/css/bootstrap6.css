@@ -18213,6 +18213,74 @@
     border-bottom-right-radius: var(--radius-7, 0.5rem);
   }
 }
+@layer components {
+  .alert-primary {
+    --theme-base: var(--primary-base);
+    --theme-fg: var(--primary-fg);
+    --theme-fg-emphasis: var(--primary-fg-emphasis);
+    --theme-bg: var(--primary-bg);
+    --theme-bg-subtle: var(--primary-bg-subtle);
+    --theme-bg-muted: var(--primary-bg-muted);
+    --theme-border: var(--primary-border);
+    --theme-focus-ring: var(--primary-focus-ring);
+    --theme-contrast: var(--primary-contrast);
+  }
+  .alert-secondary {
+    --theme-base: var(--secondary-base);
+    --theme-fg: var(--secondary-fg);
+    --theme-fg-emphasis: var(--secondary-fg-emphasis);
+    --theme-bg: var(--secondary-bg);
+    --theme-bg-subtle: var(--secondary-bg-subtle);
+    --theme-bg-muted: var(--secondary-bg-muted);
+    --theme-border: var(--secondary-border);
+    --theme-focus-ring: var(--secondary-focus-ring);
+    --theme-contrast: var(--secondary-contrast);
+  }
+  .alert-success {
+    --theme-base: var(--success-base);
+    --theme-fg: var(--success-fg);
+    --theme-fg-emphasis: var(--success-fg-emphasis);
+    --theme-bg: var(--success-bg);
+    --theme-bg-subtle: var(--success-bg-subtle);
+    --theme-bg-muted: var(--success-bg-muted);
+    --theme-border: var(--success-border);
+    --theme-focus-ring: var(--success-focus-ring);
+    --theme-contrast: var(--success-contrast);
+  }
+  .alert-danger {
+    --theme-base: var(--danger-base);
+    --theme-fg: var(--danger-fg);
+    --theme-fg-emphasis: var(--danger-fg-emphasis);
+    --theme-bg: var(--danger-bg);
+    --theme-bg-subtle: var(--danger-bg-subtle);
+    --theme-bg-muted: var(--danger-bg-muted);
+    --theme-border: var(--danger-border);
+    --theme-focus-ring: var(--danger-focus-ring);
+    --theme-contrast: var(--danger-contrast);
+  }
+  .alert-warning {
+    --theme-base: var(--warning-base);
+    --theme-fg: var(--warning-fg);
+    --theme-fg-emphasis: var(--warning-fg-emphasis);
+    --theme-bg: var(--warning-bg);
+    --theme-bg-subtle: var(--warning-bg-subtle);
+    --theme-bg-muted: var(--warning-bg-muted);
+    --theme-border: var(--warning-border);
+    --theme-focus-ring: var(--warning-focus-ring);
+    --theme-contrast: var(--warning-contrast);
+  }
+  .alert-info {
+    --theme-base: var(--info-base);
+    --theme-fg: var(--info-fg);
+    --theme-fg-emphasis: var(--info-fg-emphasis);
+    --theme-bg: var(--info-bg);
+    --theme-bg-subtle: var(--info-bg-subtle);
+    --theme-bg-muted: var(--info-bg-muted);
+    --theme-border: var(--info-border);
+    --theme-focus-ring: var(--info-focus-ring);
+    --theme-contrast: var(--info-contrast);
+  }
+}
 :root,
 [data-bs-theme=light] {
   --primary-base: #007bb1;

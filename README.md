@@ -253,6 +253,23 @@ Bootstrap 6 dropped the `--bs-` prefix entirely. Mockup components (`pat-content
 > overlays (`rgba(var(--bs-primary-rgb), .25)`) in Mockup's compiled Svelte output
 > — overriding them would require recompiling Mockup.
 
+#### Alert color variants — `.alert-{color}`
+
+Bootstrap 6 kept the `.alert` base class but removed the named color variants (`.alert-danger`, `.alert-warning`, etc.). Color is now applied via the BS6 "theme context" system: setting `--theme-*` CSS custom properties on an element causes the alert to adopt that palette.
+
+The shim re-introduces the old class names by mapping them to the same `--theme-*` tokens that BS6's own `.theme-{name}` utility classes set.
+
+| BS5 class | Shim behaviour |
+|---|---|
+| `.alert-primary` | sets `--theme-*` to `--primary-*` tokens |
+| `.alert-secondary` | sets `--theme-*` to `--secondary-*` tokens |
+| `.alert-success` | sets `--theme-*` to `--success-*` tokens |
+| `.alert-danger` | sets `--theme-*` to `--danger-*` tokens |
+| `.alert-warning` | sets `--theme-*` to `--warning-*` tokens |
+| `.alert-info` | sets `--theme-*` to `--info-*` tokens |
+
+Dark mode is automatic: all `--{name}-bg-subtle`, `--{name}-fg` etc. tokens are defined with `light-dark()` in Bootstrap 6.
+
 ### What is *not* covered
 
 | BS5 feature | Status |

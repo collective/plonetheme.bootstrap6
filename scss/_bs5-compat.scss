@@ -34,6 +34,9 @@
 //   Buttons       .btn-primary / .btn-success … .btn-solid  + --theme-* vars
 //                 .btn-outline-primary …        .btn-outline + --theme-* vars
 //
+//   Alert         .alert-primary / .alert-danger …  removed; color now via
+//   variants      .alert-warning / .alert-info  …   --theme-* CSS props
+//
 //   Responsive    .d-{bp}-*, .flex-{bp}-*,       .{bp}:d-*, .{bp}:flex-*
 //   utilities     .align-items-{bp}-*,           (breakpoint prefix replaces
 //                 .justify-content-{bp}-*,        infix in all utilities)
@@ -1025,6 +1028,46 @@
     border-top: var(--border-width, 1px) solid var(--border-color);
     border-bottom-left-radius: var(--radius-7, .5rem);
     border-bottom-right-radius: var(--radius-7, .5rem);
+  }
+
+} // @layer components
+
+// ============================================================================
+// 10. Alert color variants — .alert-{color}
+//
+// Bootstrap 6 kept .alert as a component but removed the named color variants
+// (.alert-danger, .alert-warning, etc.). Instead, BS6 uses a "theme context"
+// system: setting --theme-* CSS custom properties on an element causes the
+// alert (and other components) to adopt that color palette.
+//
+// BS6 already generates .theme-danger, .theme-warning, .theme-info, etc.
+// as utility classes that set the full --theme-* token set. This shim
+// re-introduces the old .alert-{name} class names by applying the same
+// --theme-* assignments directly on the element.
+//
+// How it works:
+//   .alert reads:  background-color: var(--alert-bg)
+//                  where --alert-bg is set to var(--theme-bg-subtle, …)
+//   .alert-danger sets: --theme-bg-subtle: var(--danger-bg-subtle)
+//   Both classes on the same element → danger's subtle bg is used. ✓
+//
+// Covered: primary, secondary, success, danger, warning, info
+// ============================================================================
+
+@layer components {
+
+  @each $name in primary, secondary, success, danger, warning, info {
+    .alert-#{$name} {
+      --theme-base:       var(--#{$name}-base);
+      --theme-fg:         var(--#{$name}-fg);
+      --theme-fg-emphasis: var(--#{$name}-fg-emphasis);
+      --theme-bg:         var(--#{$name}-bg);
+      --theme-bg-subtle:  var(--#{$name}-bg-subtle);
+      --theme-bg-muted:   var(--#{$name}-bg-muted);
+      --theme-border:     var(--#{$name}-border);
+      --theme-focus-ring: var(--#{$name}-focus-ring);
+      --theme-contrast:   var(--#{$name}-contrast);
+    }
   }
 
 } // @layer components
